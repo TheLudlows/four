@@ -8,7 +8,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 
-
+/**
+ *  @author: TheLudlows
+ *  @since 0.1
+ */
 public class KryoSerialize implements Serialize {
     private final static ThreadLocal<Kryo> HOLDER = ThreadLocal.withInitial(() -> KryoRegister.registerKryo());
 
@@ -19,7 +22,7 @@ public class KryoSerialize implements Serialize {
         }
         Kryo kryo = HOLDER.get();
         Output output = new Output(new ByteBufOutputStream(buf));
-        kryo.writeClassAndObject(output, obj);
+        kryo.writeObject(output, obj);
         output.flush();
         output.close();
     }
@@ -32,12 +35,12 @@ public class KryoSerialize implements Serialize {
         }
         Input input = new Input(new ByteBufInputStream(buf));
         Kryo kryo = HOLDER.get();
-        return kryo.readClassAndObject(input);
+        return kryo.readObject(input,clazz);
     }
 
     @Override
     public byte[] objectToByte(Object obj) {
-        return null;
+      return null;
     }
 
     @Override

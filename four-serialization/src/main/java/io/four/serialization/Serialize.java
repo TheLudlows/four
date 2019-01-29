@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 /**
  * We suggested use DirectByteBuf
  * {@link ByteBuf}
+ * {@link io.four.serialization.fastjson.FastJSONSerialize}
  */
 
 public interface Serialize<T> {
@@ -14,7 +15,6 @@ public interface Serialize<T> {
     T byteToObject(byte[] bytes, Class<T> clazz);
 
     void objectToByteBuf(T obj, ByteBuf out);
-
 
     T byteBufToObject(ByteBuf buf, Class<T> clazz);
 }

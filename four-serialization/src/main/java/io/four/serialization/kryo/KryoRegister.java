@@ -12,6 +12,11 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ *  @author: TheLudlows
+ *  @since 0.1
+ */
+
 public class KryoRegister {
 
     private KryoRegister() {
