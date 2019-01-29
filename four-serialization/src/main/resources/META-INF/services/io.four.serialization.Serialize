@@ -1,0 +1,2 @@
+io.four.serialization.kryo.KryoSerialize
+io.four.serialization.fastjson.FastJSONSerialize
