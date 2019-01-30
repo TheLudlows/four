@@ -12,6 +12,8 @@ public class ResponseBody implements Serializable {
 
     private byte status ;
 
-    Object SerciceResult;
+    Object serviceResult;
+
+    long requestId;
 
 }

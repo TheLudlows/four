@@ -14,7 +14,7 @@
         <module>four-registry</module>
         <module>four-transport</module>
         <module>four-protocol</module>
-        <module>four-dashboard</module>
+        <module>four-monitor</module>
         <module>four-core</module>
     </modules>
 
