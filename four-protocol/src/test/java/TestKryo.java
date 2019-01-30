@@ -1,4 +1,4 @@
-import io.four.protocol.ProtocolHead;
+import io.four.protocol.four.ProtocolHead;
 import io.four.serialization.Serialize;
 import io.four.serialization.SerializerHolder;
 import io.four.serialization.fastjson.FastJSONSerialize;

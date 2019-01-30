@@ -1,4 +1,4 @@
-package io.four.protocol;
+package io.four.protocol.body;
 
 
 import java.io.Serializable;
