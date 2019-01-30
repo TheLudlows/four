@@ -13,7 +13,7 @@
         <module>four-common</module>
         <module>four-registry</module>
         <module>four-transport</module>
-        <module>four-serialization</module>
+        <module>four-protocol</module>
         <module>four-dashboard</module>
         <module>four-core</module>
     </modules>
