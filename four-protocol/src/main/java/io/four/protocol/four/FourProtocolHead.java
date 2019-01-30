@@ -2,11 +2,11 @@ package io.four.protocol.four;
 
 /**
  * ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐
- * 2   │   1   │    1   │     4    │              8
+ *     2   │   1   │    1   │     4     │              8
  * ├ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─  ┤
- * │       │        │          │
- * │   Agg    M Type  S Type   Body Size          MessageId             │
- * │       │        │          │
+ * │       │        │          │        │
+ * │   Agg    M Type  S Type    Body Size          MessageId             │
+ * │       │        │          │        │
  * └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
  * <p>
  * Agg: colorful agg Might be 0 or 1
