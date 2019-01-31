@@ -1,6 +1,7 @@
 package io.four.protocol.four;
 
 import io.four.protocol.body.Body;
+import io.netty.buffer.ByteBuf;
 
 import static io.four.protocol.four.ProtocolConstant.AGG;
 
@@ -68,5 +69,14 @@ public class TransportEntry {
     public TransportEntry setSize(int size) {
         this.size = size;
         return this;
+    }
+
+    public void toByteBuf(ByteBuf buf) {
+        buf.writeByte(agg);
+        buf.writeByte(mType);
+        buf.writeByte(sType);
+        buf.writeLong(messageId);
+        buf.writeInt(size);
+        body.toByteBuf(buf);
     }
 }
