@@ -26,4 +26,20 @@ public enum ResponseEnum {
         this.desc = desc;
     }
 
-}
+    public byte getCode() {
+        return code;
+    }
+
+    public ResponseEnum setCode(byte code) {
+        this.code = code;
+        return this;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public ResponseEnum setDesc(String desc) {
+        this.desc = desc;
+        return this;
+    }}
