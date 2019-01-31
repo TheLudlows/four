@@ -1,15 +1,14 @@
 package io.four.protocol.body;
 
 
-import java.io.Serializable;
+import io.netty.buffer.ByteBuf;
+
 
 /**
  * @author: TheLudlows
  * @since 0.1
  */
-public class RequestBody implements Serializable {
-
-    private static final long serialVersionUID = 5686121262356677607L;
+public class RequestBody extends ByteBufBody {
 
     private long requestId;
 
@@ -19,5 +18,23 @@ public class RequestBody implements Serializable {
 
     private long timestamp;
 
+    public static Body toBody(ByteBuf buf, Class<Object> objectClass) {
+        return null;
+    }
 
+
+    @Override
+    protected void toByteBufImpl(ByteBuf byteBuf) {
+        byteBuf.writeLong(requestId);
+        byteBuf.writeBytes(serviceName.getBytes());
+        byteBuf.writeLong(timestamp);
+        serialize.objectToByteBuf(args, byteBuf);
+    }
+
+    public RequestBody(long requestId, String serviceName, Object[] args) {
+        this.requestId = requestId;
+        this.serviceName = serviceName;
+        this.args = args;
+        this.timestamp = System.currentTimeMillis();
+    }
 }

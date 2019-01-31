@@ -1,4 +1,5 @@
-import io.four.protocol.four.ProtocolHead;
+import io.four.protocol.body.Body;
+import io.four.protocol.body.ResponseBody;
 import io.four.serialization.Serialize;
 import io.four.serialization.SerializerHolder;
 import io.four.serialization.fastjson.FastJSONSerialize;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static io.four.protocol.body.ResponseEnum.SUCCESS;
 
 public class TestKryo implements Serializable {
 
@@ -64,12 +67,6 @@ public class TestKryo implements Serializable {
         ByteBuf buf = ByteBufAllocator.DEFAULT.directBuffer();
         System.out.println(buf);
     }
-    @Test
-    public void TestPor(){
-        System.out.println(new ProtocolHead().getAgg());
-    }
-
-
 }
 class FjRunner implements Runnable {
 
@@ -128,7 +125,4 @@ class fj2Runner implements Runnable {
         }
         System.out.println("KryRunner_"+Thread.currentThread().getName()+":"+(System.currentTimeMillis()-start));
     }
-
-
-
 }
