@@ -23,6 +23,15 @@ public class TransportEntry {
 
     Body body;
 
+
+
+    public TransportEntry(byte mType, byte sType, long messageId, Body body) {
+        this.mType = mType;
+        this.sType = sType;
+        this.messageId = messageId;
+        this.body = body;
+    }
+
     public TransportEntry(byte mType, byte sType, int size, long messageId, Body body) {
         this.mType = mType;
         this.sType = sType;
@@ -76,7 +85,23 @@ public class TransportEntry {
         buf.writeByte(mType);
         buf.writeByte(sType);
         buf.writeLong(messageId);
+        this.size = body.bodyLength();
         buf.writeInt(size);
-        body.toByteBuf(buf);
+    }
+
+    public Body getBody() {
+        return body;
+    }
+
+    @Override
+    public String toString() {
+        return "TransportEntry{" +
+                "agg=" + agg +
+                ", mType=" + mType +
+                ", sType=" + sType +
+                ", messageId=" + messageId +
+                ", size=" + size +
+                ", body=" + body.toString() +
+                '}';
     }
 }

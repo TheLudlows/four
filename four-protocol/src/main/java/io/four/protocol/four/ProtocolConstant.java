@@ -12,7 +12,7 @@ package io.four.protocol.four;
  * Agg: colorful agg Might be 0 or 1
  * M Type: Message Type request/response/heat beat
  * S Type: Serialize Type
- * protocolId: 消息Id
+ * MessageId: 消息Id
  */
 
 

@@ -16,7 +16,7 @@ public class BufBodyUtil {
             case REPONSE:
                 return ResponseBody.toBody(buf, Object.class);
             case REQUEST:
-                return RequestBody.toBody(buf, Object.class);
+                return RequestBody.toBody(buf);
             default:
                 throw new NoSuchTypeBodyException("no sun type body");
         }
