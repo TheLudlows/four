@@ -25,7 +25,6 @@ public class KryoRegister {
     protected static Kryo registerKryo() {
         Kryo kryo = new Kryo();
         kryo.setRegistrationRequired(false);
-        //kryo.register(Message.class);
         kryo.register(ArrayList.class);
         kryo.register(LinkedList.class);
         kryo.register(CopyOnWriteArrayList.class);

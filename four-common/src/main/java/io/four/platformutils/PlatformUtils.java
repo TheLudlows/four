@@ -1,6 +1,4 @@
-package io.four.PlatformUtils;
-
-import com.sun.org.apache.bcel.internal.generic.FADD;
+package io.four.platformutils;
 
 /**
  * @author: TheLudlows

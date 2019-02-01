@@ -15,13 +15,13 @@ public class EntryBuilder {
 
     private static AtomicLong requestId = new AtomicLong(0);
 
-    public static TransportEntry requestEntry(long ServiceId, Object[] args) {
+    public static TransportEntry requestEntry(long serviceId, Object[] args) {
         long id = requestId.incrementAndGet();
         return new TransportEntry(REQUEST, FASTJSON, id,
-                new RequestBody(id, ServiceId, args));
+                new RequestBody(id, serviceId, args));
     }
 
-    public static TransportEntry ResponseEntry() {
+    public static TransportEntry responseEntry() {
         return null;
     }
 

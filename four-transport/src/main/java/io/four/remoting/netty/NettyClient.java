@@ -13,8 +13,8 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.four.PlatformUtils.PlatformUtils.AVAILABLE_PROCESSORS;
-import static io.four.PlatformUtils.PlatformUtils.SUPPORT_EPOLL;
+import static io.four.platformutils.PlatformUtils.AVAILABLE_PROCESSORS;
+import static io.four.platformutils.PlatformUtils.SUPPORT_EPOLL;
 
 /**
  * @author: TheLudlows
@@ -25,7 +25,7 @@ public class NettyClient implements Remoting {
     private EventLoopGroup eventLoopGroup;
     private Bootstrap bootstrap;
 
-    public final static ConcurrentHashMap<String /* addr */, Channel> channels = new ConcurrentHashMap();
+    public final static ConcurrentHashMap<String /* addr */, Channel> CHANNELS = new ConcurrentHashMap();
 
     @Override
     public void start() {
@@ -59,7 +59,7 @@ public class NettyClient implements Remoting {
         if (!channelExist(address)) {
             doConnect(address);
         }
-        return channels.get(address);
+        return CHANNELS.get(address);
     }
 
     private void doConnect(String address) throws InterruptedException {
@@ -68,25 +68,28 @@ public class NettyClient implements Remoting {
         Channel channel = null;
 
         synchronized (this) {
-            if (channelExist(address)) return;
+            if (channelExist(address)) {
+                return;
+            }
             try {
                 channel = this.bootstrap.connect(isa).sync().channel();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            channels.put(address, channel);
+            CHANNELS.put(address, channel);
         }
     }
 
     boolean channelExist(String address) {
-        Channel channel = channels.get(address);
+        Channel channel = CHANNELS.get(address);
         if (channel != null) {
             if (!channel.isActive()) {
-                channels.remove(address);
+                CHANNELS.remove(address);
                 channel.close();
                 return false;
-            } else
+            } else {
                 return true;
+            }
         }
         return false;
     }

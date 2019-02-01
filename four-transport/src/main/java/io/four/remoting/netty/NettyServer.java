@@ -10,8 +10,8 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-import static io.four.PlatformUtils.PlatformUtils.AVAILABLE_PROCESSORS;
-import static io.four.PlatformUtils.PlatformUtils.SUPPORT_EPOLL;
+import static io.four.platformutils.PlatformUtils.AVAILABLE_PROCESSORS;
+import static io.four.platformutils.PlatformUtils.SUPPORT_EPOLL;
 
 /**
  * @author: TheLudlows
@@ -24,8 +24,6 @@ public class NettyServer implements Remoting {
 
     public static  boolean start = false;
 
-    //private  ServerInvokerFactory invokerFactory;
-    //private  CopyOnWriteArrayList<RpcServerFilter> filters;
     private volatile Channel channel;
 
     @Override

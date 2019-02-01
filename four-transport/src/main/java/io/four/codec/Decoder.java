@@ -31,8 +31,9 @@ public class Decoder extends ByteToMessageDecoder {
     }
 
     private void checkBodySize(int size) throws TransportException {
-        if (size > MAX_BODY_SIZE)
+        if (size > MAX_BODY_SIZE) {
             throw new TransportException("body of request is bigger than limit value " + MAX_BODY_SIZE);
+        }
     }
 
 }
