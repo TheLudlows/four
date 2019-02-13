@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 
 /**
- * @author: TheLudlows
+ * @author TheLudlows
  * @since 0.1
  */
 public interface Body {

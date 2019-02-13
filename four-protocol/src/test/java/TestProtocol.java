@@ -7,7 +7,7 @@ import org.junit.Test;
 import static io.four.protocol.body.ResponseEnum.SUCCESS;
 
 /**
- * @author: TheLudlows
+ * @author TheLudlows
  * @since 0.1
  */
 public class TestProtocol {

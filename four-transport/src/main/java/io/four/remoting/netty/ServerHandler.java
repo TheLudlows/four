@@ -6,7 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
- * @author: TheLudlows
+ * @author TheLudlows
  * @since 0.1
  */
 public class ServerHandler extends SimpleChannelInboundHandler<TransportEntry> {

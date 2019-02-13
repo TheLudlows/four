@@ -6,7 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
- * @author: TheLudlows
+ * @author TheLudlows
  * @since 0.1
  */
 public class Encoder extends MessageToByteEncoder<TransportEntry> {

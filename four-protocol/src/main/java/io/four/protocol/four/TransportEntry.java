@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import static io.four.protocol.four.ProtocolConstant.AGG;
 
 /**
- * @author: TheLudlows
+ * @author TheLudlows
  * @since 0.1
  */
 public class TransportEntry {

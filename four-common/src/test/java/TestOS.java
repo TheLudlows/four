@@ -1,7 +1,7 @@
 import org.junit.Test;
 
 /**
- * @author: TheLudlows
+ * @author TheLudlows
  * @since 0.1
  */
 public class TestOS {

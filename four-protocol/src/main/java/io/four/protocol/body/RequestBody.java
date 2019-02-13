@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 
 /**
- * @author: TheLudlows
+ * @author TheLudlows
  * @since 0.1
  */
 public class RequestBody extends ByteBufBody {

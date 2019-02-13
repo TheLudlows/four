@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 
 /**
- *  @author: TheLudlows
+ *  @author TheLudlows
  *  @since 0.1
  */
 public class KryoSerialize implements Serialize {

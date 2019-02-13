@@ -13,7 +13,7 @@ import static io.four.protocol.four.ProtocolConstant.FASTJSON;
 
 
 /**
- * @author: TheLudlows
+ * @author TheLudlows
  * @since 0.1
  */
 public class ClientHandler extends SimpleChannelInboundHandler<TransportEntry> {

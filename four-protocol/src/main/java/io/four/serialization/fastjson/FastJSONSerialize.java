@@ -11,7 +11,7 @@ import io.netty.buffer.ByteBufOutputStream;
 import java.io.IOException;
 
 /**
- *  @author: TheLudlows
+ *  @author TheLudlows
  *  @since 0.1
  */
 

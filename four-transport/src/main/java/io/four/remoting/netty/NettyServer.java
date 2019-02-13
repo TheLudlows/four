@@ -14,7 +14,7 @@ import static io.four.platformutils.PlatformUtils.AVAILABLE_PROCESSORS;
 import static io.four.platformutils.PlatformUtils.SUPPORT_EPOLL;
 
 /**
- * @author: TheLudlows
+ * @author TheLudlows
  * @since 0.1
  */
 public class NettyServer implements Remoting {

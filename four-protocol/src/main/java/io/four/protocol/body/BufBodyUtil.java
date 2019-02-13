@@ -7,7 +7,7 @@ import static io.four.protocol.four.ProtocolConstant.REPONSE;
 import static io.four.protocol.four.ProtocolConstant.REQUEST;
 
 /**
- * @author: TheLudlows
+ * @author TheLudlows
  * @since 0.1
  */
 public class BufBodyUtil {

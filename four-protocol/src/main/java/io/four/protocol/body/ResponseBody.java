@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 
 
 /**
- * @Author: TheLudlows
+ * @author TheLudlows
  * @since 0.1
  */
 public class ResponseBody extends ByteBufBody {

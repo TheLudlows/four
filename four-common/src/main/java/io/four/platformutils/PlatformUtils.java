@@ -1,7 +1,7 @@
 package io.four.platformutils;
 
 /**
- * @author: TheLudlows
+ * @author TheLudlows
  * @since 0.1
  */
 public class PlatformUtils {
