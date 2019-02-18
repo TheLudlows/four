@@ -21,7 +21,9 @@ public interface Body {
 }
 
 abstract class ByteBufBody implements Body {
-    static Serialize serialize = SerializerHolder.serialize();
+
+    protected static Serialize serialize = SerializerHolder.serialize();
+
     public transient int length;
 
     @Override

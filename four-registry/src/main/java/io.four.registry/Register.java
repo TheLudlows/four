@@ -1,5 +1,7 @@
 package io.four.registry;
 
+import io.four.registry.config.Host;
+
 /**
  * @author TheLudlows
  */
@@ -11,7 +13,7 @@ public interface Register {
     /**
      *register service to config center
      */
-    void register(String address,String serverName,int weight);
+    void register(String address,String serverName,int weight,  Host serverAddress);
 
     /**
      * unRegister service

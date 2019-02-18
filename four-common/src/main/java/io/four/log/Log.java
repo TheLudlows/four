@@ -8,7 +8,7 @@ import java.util.logging.Logger;
  * log utils
  */
 public class Log {
-    private static Logger logger = Logger.getLogger("four log");
+    private static Logger logger = Logger.getLogger("four  log");
 
     public static void info(String detail, Object... params) {
         log(logger, null, Level.INFO, detail, params);

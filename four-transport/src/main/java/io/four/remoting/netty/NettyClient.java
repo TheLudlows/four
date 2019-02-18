@@ -25,7 +25,7 @@ public class NettyClient implements Remoting {
     private EventLoopGroup eventLoopGroup;
     private Bootstrap bootstrap;
 
-    public final static ConcurrentHashMap<String /* addr */, Channel> CHANNELS = new ConcurrentHashMap();
+    public final static ConcurrentHashMap<String, Channel> CHANNELS = new ConcurrentHashMap();
 
     @Override
     public void start() {
@@ -55,14 +55,14 @@ public class NettyClient implements Remoting {
 
     }
 
-    public Channel connect(String address) throws InterruptedException {
+    public Channel connect(String address) {
         if (!channelExist(address)) {
             doConnect(address);
         }
         return CHANNELS.get(address);
     }
 
-    private void doConnect(String address) throws InterruptedException {
+    private void doConnect(String address) {
         String[] s = address.split(":");
         InetSocketAddress isa = new InetSocketAddress(s[0], Integer.valueOf(s[1]));
         Channel channel = null;
@@ -94,7 +94,7 @@ public class NettyClient implements Remoting {
         return false;
     }
 
-    public ChannelFuture send(TransportEntry entry, String address) throws InterruptedException {
+    public ChannelFuture send(TransportEntry entry, String address) {
         Channel channel = connect(address);
         return channel.writeAndFlush(entry);
     }

@@ -1,11 +1,10 @@
-import io.four.protocol.body.RequestBody;
-import io.four.protocol.four.TransportEntry;
 import io.four.remoting.netty.NettyClient;
 import io.four.remoting.netty.NettyServer;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static io.four.protocol.four.EntryBuilder.requestEntry;
-import static io.four.protocol.four.ProtocolConstant.FASTJSON;
 
 
 /**
@@ -13,8 +12,8 @@ import static io.four.protocol.four.ProtocolConstant.FASTJSON;
  * @since 0.1
  */
 public class TestTransport {
-
-    public static void main(String[] args) throws InterruptedException {
+    @Test
+    public void client() throws InterruptedException, IOException {
         String address = "localhost:7777";
         NettyClient client = new NettyClient();
         client.start();
@@ -23,6 +22,7 @@ public class TestTransport {
         String [] str = new String[1];
         str[0] = "hhhhhh";
         client.send(requestEntry(1231232,str),address);
+        System.in.read();
     }
 
     @Test
