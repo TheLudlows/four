@@ -1,5 +1,9 @@
 package io.four.registry;
 
+import io.four.registry.config.HostWithWeight;
+
+import java.util.List;
+
 /**
  * @author TheLudlows
  */
@@ -9,5 +13,5 @@ public interface Discover {
      * @param serviceName
      * @return
      */
-    String discover(String serviceName);
+    List<HostWithWeight> discover(String serviceName);
 }

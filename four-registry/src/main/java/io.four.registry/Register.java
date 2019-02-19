@@ -1,22 +1,19 @@
 package io.four.registry;
 
-import io.four.registry.config.Host;
+import io.four.registry.config.HostWithWeight;
 
 /**
  * @author TheLudlows
  */
 public interface Register {
-    /**
-     * init and start client
-     */
-    void initAndStart();
+
     /**
      *register service to config center
      */
-    void register(String address,String serverName,int weight,  Host serverAddress);
+    void register(String serverName, HostWithWeight host);
 
     /**
      * unRegister service
      */
-    void unRegister(String address,String app,int weight);
+    void unRegister(String address,String app, HostWithWeight host);
 }

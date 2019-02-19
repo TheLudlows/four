@@ -7,15 +7,30 @@ import java.util.Objects;
  */
 public class Host {
 
-    private String address;
+    private String ip;
     private int port;
 
-    public String getAddress() {
-        return address;
+
+    public Host(String ip, int port) {
+        this.ip = ip;
+        this.port = port;
     }
 
-    public Host setAddress(String address) {
-        this.address = address;
+    public Host(String address) {
+        String[] array = address.split(":");
+        this.ip = array[0].trim();
+        this.port = Integer.parseInt(array[1].trim());
+    }
+
+    public Host() {
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public Host setIp(String ip) {
+        this.ip = ip;
         return this;
     }
 
@@ -30,7 +45,7 @@ public class Host {
 
     @Override
     public String toString() {
-        return    address  + ":" + port ;
+        return ip + ":" + port;
     }
 
     @Override
@@ -39,11 +54,11 @@ public class Host {
         if (o == null || getClass() != o.getClass()) return false;
         Host host = (Host) o;
         return port == host.port &&
-                Objects.equals(address, host.address);
+                Objects.equals(ip, host.ip);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(address, port);
+        return Objects.hash(ip, port);
     }
 }

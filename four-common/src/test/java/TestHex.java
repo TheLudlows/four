@@ -61,24 +61,4 @@ public class TestHex {
 
     }
 
-    @Test
-    public void testHex() {
-        HexUtils.toHex(1);
-        long start = System.currentTimeMillis();
-        for(long i=0;i<1000000;i++) {
-            //Long.toHexString(i);
-           toHex(i);
-        }
-
-        System.out.println(System.currentTimeMillis()-start);
-    }
-
-    @Test
-    public void testHex2() {
-        System.out.println(toHex(Long.MAX_VALUE));
-        System.out.println(Long.toHexString(Long.MAX_VALUE));
-    }
-
-
-
 }
