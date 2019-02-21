@@ -1,7 +1,5 @@
 package io.four;
 
-import io.four.hex.HexUtils;
-import io.four.registry.config.Host;
 import io.four.registry.config.HostWithWeight;
 import io.four.registry.zookeeper.ZookeeperDiscover;
 import io.four.registry.zookeeper.ZookeeperRegister;
@@ -33,7 +31,7 @@ public class TestZK {
     public void server() {
         String zkAddress = "localhost:2181";
         ZookeeperRegister zookeeperRegister = new ZookeeperRegister(zkAddress);
-        zookeeperRegister.register( "service00001",
+        zookeeperRegister.register("service00001",
                 new HostWithWeight("localhost", 10000, 1));
         try {
             System.in.read();

@@ -21,6 +21,13 @@ public class ResponseBody extends ByteBufBody {
         this.serviceResult = serviceResult;
     }
 
+    public static Body toBody(ByteBuf buf, Class resultClazz) {
+        if (buf == null) {
+            throw new NullPointerException();
+        }
+        return new ResponseBody(buf.readByte(), buf.readLong(), serialize.byteBufToObject(buf, resultClazz));
+    }
+
     @Override
     protected void toByteBufImpl(ByteBuf byteBuf) {
         byteBuf.writeByte(status);
@@ -62,12 +69,5 @@ public class ResponseBody extends ByteBufBody {
                 ", requestId=" + requestId +
                 ", serviceResult=" + serviceResult +
                 '}';
-    }
-
-    public static Body toBody(ByteBuf buf, Class resultClazz) {
-        if (buf == null) {
-            throw new NullPointerException();
-        }
-        return new ResponseBody(buf.readByte(), buf.readLong(), serialize.byteBufToObject(buf, resultClazz));
     }
 }

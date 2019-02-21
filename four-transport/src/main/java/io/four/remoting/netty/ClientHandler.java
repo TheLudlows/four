@@ -1,15 +1,9 @@
 package io.four.remoting.netty;
 
 import io.four.log.Log;
-import io.four.protocol.body.Body;
-import io.four.protocol.body.RequestBody;
 import io.four.protocol.four.TransportEntry;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-
-import java.io.IOException;
-
-import static io.four.protocol.four.ProtocolConstant.FASTJSON;
 
 
 /**
@@ -30,6 +24,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<TransportEntry> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        Log.info("error{}",cause);
+        Log.info("error{}", cause);
     }
 }

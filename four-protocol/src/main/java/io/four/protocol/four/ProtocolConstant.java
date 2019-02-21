@@ -2,7 +2,7 @@ package io.four.protocol.four;
 
 /**
  * ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐
- *     2   │   1    │    1   │     4     │              8
+ * 2   │   1    │    1   │     4     │              8
  * ├ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─  ┤
  * │       │        │        │           |
  * │   Agg    M Type  S Type   Body Size         MessageId              │
@@ -24,5 +24,6 @@ public class ProtocolConstant {
     public final static byte REQUEST = 0x1;
     public final static byte REPONSE = 0x2;
     public final static byte HEARTBEAT = 0x4;
+    public final static int SERVERNAME_LENGTH = 0x40;
 
 }

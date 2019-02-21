@@ -9,11 +9,12 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 
 /**
- *  @author TheLudlows
- *  @since 0.1
+ * @author TheLudlows
+ * @since 0.1
  */
 public class KryoSerialize implements Serialize {
-    private final static ThreadLocal<Kryo> HOLDER = ThreadLocal.withInitial(() -> KryoRegister.registerKryo());
+    private final static ThreadLocal<Kryo> HOLDER = ThreadLocal.withInitial(() -> new KryoRegister().registerKryo());
+    private final static ThreadLocal<Output> OUTPUTHOLDER = ThreadLocal.withInitial(() -> new Output());
 
     @Override
     public void objectToByteBuf(Object obj, ByteBuf buf) {
@@ -21,7 +22,8 @@ public class KryoSerialize implements Serialize {
             return;
         }
         Kryo kryo = HOLDER.get();
-        Output output = new Output(new ByteBufOutputStream(buf));
+        Output output = OUTPUTHOLDER.get();
+        output.setOutputStream(new ByteBufOutputStream(buf));
         kryo.writeObject(output, obj);
         output.flush();
         output.close();
@@ -35,12 +37,12 @@ public class KryoSerialize implements Serialize {
         }
         Input input = new Input(new ByteBufInputStream(buf));
         Kryo kryo = HOLDER.get();
-        return kryo.readObject(input,clazz);
+        return kryo.readObject(input, clazz);
     }
 
     @Override
     public byte[] objectToByte(Object obj) {
-      return null;
+        return null;
     }
 
     @Override

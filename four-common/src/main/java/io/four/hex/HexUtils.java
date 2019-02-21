@@ -126,18 +126,15 @@ public class HexUtils {
 
     /**
      * high performance
-     *
-     * @param bytes
-     * @return
      */
-    public static String toHex(byte[] bytes) {
-        Objects.requireNonNull(bytes, "bytes is null");
-        return bytes.length == 0 ? "" : toHex0(bytes);
+    public static byte[] toHex(String hex) {
+        Objects.requireNonNull(hex, "bytes is null");
+        return hex.length() == 0 ? null : toHex0(hex.getBytes());
     }
 
-    private static String toHex0(byte[] bytes) {
+    private static byte[] toHex0(byte[] bytes) {
         int length = bytes.length;
-        byte[] hexBytes = new byte[length << 1];
+        byte[] hexBytes = new byte[128];
 
         int batchLength = length >>> 3 << 3;
 
@@ -167,7 +164,7 @@ public class HexUtils {
             unsafe().putShort(hexBytes, (long) ARRAY_BYTE_BASE_OFFSET + (i << 1), byteToHexLE(bytes[i]));
         }
 
-        return new String(hexBytes);
+        return hexBytes;
     }
 
     /**
@@ -213,7 +210,7 @@ public class HexUtils {
 
     public static byte[] fromHex0(String str) {
         int length = str.length();
-        byte[] bytes = new byte[length >>> 1];
+        byte[] bytes = new byte[128];
         byte[] strBytes = str.getBytes();
 
         int batchLength = length >>> 4 << 4;

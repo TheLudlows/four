@@ -130,7 +130,8 @@ public class UnsafeStringUtils {
     }
 
     /**
-     *  unsafe
+     * unsafe
+     *
      * @param bytes
      * @return
      */
@@ -148,7 +149,7 @@ public class UnsafeStringUtils {
         }
 
         UnsafeUtils.unsafe().putObject(obj, bytesFieldOffset, bytes);
-        UnsafeUtils.unsafe().putByte(obj, coderFieldOffset, (byte)0);
+        UnsafeUtils.unsafe().putByte(obj, coderFieldOffset, (byte) 0);
         UnsafeUtils.unsafe().putInt(obj, hashFieldOffset, 0);
 
         return (String) obj;

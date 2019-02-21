@@ -15,9 +15,9 @@ public class TestProtocol {
     public void testLength() {
         ByteBuf buf = ByteBufAllocator.DEFAULT.directBuffer();
         //buf.writeInt(111);
-        Body body = new ResponseBody(SUCCESS.getCode(),1L,SUCCESS.getDesc());
+        Body body = new ResponseBody(SUCCESS.getCode(), 1L, SUCCESS.getDesc());
         body.toByteBuf(buf);
         System.out.println(body.bodyLength());
-        System.out.println(ResponseBody.toBody(buf,String.class));
+        System.out.println(ResponseBody.toBody(buf, String.class));
     }
 }

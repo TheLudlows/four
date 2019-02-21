@@ -12,17 +12,11 @@ import static io.four.protocol.four.ProtocolConstant.AGG;
 public class TransportEntry {
 
     private final byte agg = AGG;
-
-    private byte mType;
-
-    private byte sType;
-
-    private long messageId;
-
-    private int size;
-
     Body body;
-
+    private byte mType;
+    private byte sType;
+    private long messageId;
+    private int size;
 
 
     public TransportEntry(byte mType, byte sType, long messageId, Body body) {

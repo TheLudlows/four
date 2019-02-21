@@ -1,5 +1,3 @@
-import io.four.protocol.body.Body;
-import io.four.protocol.body.ResponseBody;
 import io.four.serialization.Serialize;
 import io.four.serialization.SerializerHolder;
 import io.four.serialization.fastjson.FastJSONSerialize;
@@ -14,12 +12,11 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static io.four.protocol.body.ResponseEnum.SUCCESS;
-
 public class TestKryo implements Serializable {
 
-    String name ;
-    int age ;
+    String name;
+    int age;
+
     public String getName() {
         return name;
     }
@@ -54,6 +51,7 @@ public class TestKryo implements Serializable {
         pool.submit(new fj2Runner());
         Thread.currentThread().join();
     }
+
     @Test
     public void getservice() {
         System.out.println(SerializerHolder.serialize());
@@ -68,41 +66,43 @@ public class TestKryo implements Serializable {
         System.out.println(buf);
     }
 }
+
 class FjRunner implements Runnable {
 
     @Override
     public void run() {
         long start = System.currentTimeMillis();
         Serialize serialize = new FastJSONSerialize();
-        for(int i=0; i<1000000;i++) {
+        for (int i = 0; i < 1000000; i++) {
             TestKryo test = new TestKryo();
             test.setAge(i);
-            test.setName(""+i);
+            test.setName("" + i);
             List<TestKryo> list = new ArrayList();
             list.add(test);
             byte[] bytes = serialize.objectToByte(list);
-            serialize.byteToObject(bytes,ArrayList.class);
+            serialize.byteToObject(bytes, ArrayList.class);
         }
-        System.out.println("fjRunner_"+Thread.currentThread().getName()+":"+(System.currentTimeMillis()-start));
+        System.out.println("fjRunner_" + Thread.currentThread().getName() + ":" + (System.currentTimeMillis() - start));
     }
 }
+
 class KryRunner implements Runnable {
     @Override
     public void run() {
         ByteBuf buf = ByteBufAllocator.DEFAULT.directBuffer();
         long start = System.currentTimeMillis();
         Serialize serialize = new KryoSerialize();
-        for(int i=0; i<1000000;i++) {
+        for (int i = 0; i < 1000000; i++) {
             TestKryo test = new TestKryo();
             test.setAge(i);
-            test.setName(""+i);
+            test.setName("" + i);
             List<TestKryo> list = new ArrayList();
             list.add(test);
-            serialize.objectToByteBuf(list,buf);
-            serialize.byteBufToObject(buf,ArrayList.class);
+            serialize.objectToByteBuf(list, buf);
+            serialize.byteBufToObject(buf, ArrayList.class);
             buf.clear();
         }
-        System.out.println("KryRunner_"+Thread.currentThread().getName()+":"+(System.currentTimeMillis()-start));
+        System.out.println("KryRunner_" + Thread.currentThread().getName() + ":" + (System.currentTimeMillis() - start));
     }
 
 }
@@ -113,16 +113,16 @@ class fj2Runner implements Runnable {
         ByteBuf buf = ByteBufAllocator.DEFAULT.directBuffer();
         long start = System.currentTimeMillis();
         Serialize serialize = new FastJSONSerialize();
-        for(int i=0; i<1000000;i++) {
+        for (int i = 0; i < 1000000; i++) {
             TestKryo test = new TestKryo();
             test.setAge(i);
-            test.setName(""+i);
+            test.setName("" + i);
             List<TestKryo> list = new ArrayList();
             list.add(test);
-            serialize.objectToByteBuf(list,buf);
-            serialize.byteBufToObject(buf,ArrayList.class);
+            serialize.objectToByteBuf(list, buf);
+            serialize.byteBufToObject(buf, ArrayList.class);
             buf.clear();
         }
-        System.out.println("KryRunner_"+Thread.currentThread().getName()+":"+(System.currentTimeMillis()-start));
+        System.out.println("KryRunner_" + Thread.currentThread().getName() + ":" + (System.currentTimeMillis() - start));
     }
 }

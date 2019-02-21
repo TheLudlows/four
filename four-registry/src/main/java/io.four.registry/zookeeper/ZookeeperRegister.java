@@ -18,9 +18,9 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class ZookeeperRegister implements Register {
 
+    private static ConcurrentMap<String, PathChildrenCache> cacheMap = new ConcurrentHashMap();
     private CuratorFramework curator;
     private String zkAddress;
-    private static ConcurrentMap<String, PathChildrenCache> cacheMap = new ConcurrentHashMap();
 
     public ZookeeperRegister(String connectString) {
         this.zkAddress = connectString;
@@ -92,7 +92,7 @@ public class ZookeeperRegister implements Register {
                 watcher.start(PathChildrenCache.StartMode.POST_INITIALIZED_EVENT);
                 cacheMap.put(path, watcher);
             } catch (Exception e) {
-                Log.warn("Add register listener failed",e);
+                Log.warn("Add register listener failed", e);
             }
         }
     }

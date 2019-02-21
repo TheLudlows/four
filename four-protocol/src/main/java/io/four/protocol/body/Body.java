@@ -24,7 +24,7 @@ abstract class ByteBufBody implements Body {
 
     protected static Serialize serialize = SerializerHolder.serialize();
 
-    public transient int length;
+    public int length;
 
     @Override
     public int bodyLength() {
@@ -49,7 +49,6 @@ abstract class ByteBufBody implements Body {
         length = buf.readableBytes();
         return buf;
     }
-
 
 
     protected abstract void toByteBufImpl(ByteBuf byteBuf);

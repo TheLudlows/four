@@ -13,17 +13,18 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- *  @author TheLudlows
- *  @since 0.1
+ * @author TheLudlows
+ * @since 0.1
  */
 
 public class KryoRegister {
+    private Kryo kryo;
 
-    private KryoRegister() {
+    protected KryoRegister() {
     }
 
-    protected static Kryo registerKryo() {
-        Kryo kryo = new Kryo();
+    protected Kryo registerKryo() {
+        kryo = new Kryo();
         kryo.setRegistrationRequired(false);
         kryo.register(ArrayList.class);
         kryo.register(LinkedList.class);

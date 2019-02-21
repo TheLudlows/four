@@ -11,8 +11,8 @@ import io.netty.buffer.ByteBufOutputStream;
 import java.io.IOException;
 
 /**
- *  @author TheLudlows
- *  @since 0.1
+ * @author TheLudlows
+ * @since 0.1
  */
 
 public class FastJSONSerialize implements Serialize {

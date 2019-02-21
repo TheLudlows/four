@@ -1,14 +1,13 @@
 import io.four.UnsafeStringUtils;
 import io.four.UnsafeUtils;
-import io.four.hex.HexUtils;
 import org.junit.Test;
-
-import static io.four.hex.HexUtils.toHex;
 
 /**
  * @author TheLudlows
  */
 public class TestHex {
+    public static String str;
+
     /*@Test
     public void getLength() {
         System.out.println(BYTE_TABLE.length);
@@ -32,31 +31,31 @@ public class TestHex {
     System.out.println(n);
     }*/
     @Test
-    public void getB(){
-        System.out.println(0xFF*0xFF);
-        System.out.println((short)(102 << 8 | 102));
+    public void getB() {
+        System.out.println(0xFF * 0xFF);
+        System.out.println((short) (102 << 8 | 102));
     }
-    public static String str ;
+
     @Test
     public void testUnsafe() throws InstantiationException {
         long start = System.currentTimeMillis();
-        for(int i=0;i<1000000;i++) {
-            str = (String)UnsafeUtils.unsafe().allocateInstance(String.class);
+        for (int i = 0; i < 1000000; i++) {
+            str = (String) UnsafeUtils.unsafe().allocateInstance(String.class);
 
             //str = new String();
         }
-        System.out.println(System.currentTimeMillis()-start);
+        System.out.println(System.currentTimeMillis() - start);
     }
 
     @Test
     public void getBytes() {
         long start = System.currentTimeMillis();
-        for(int i=0;i<1000000;i++) {
-            String str = ""+i;
+        for (int i = 0; i < 1000000; i++) {
+            String str = "" + i;
             //str.getBytes();
             UnsafeStringUtils.getLatin1Bytes(str);
         }
-        System.out.println(System.currentTimeMillis()-start);
+        System.out.println(System.currentTimeMillis() - start);
         String version = System.getProperty("java.version");
 
     }

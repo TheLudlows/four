@@ -22,10 +22,9 @@ import static io.four.platformutils.PlatformUtils.SUPPORT_EPOLL;
  */
 public class NettyClient implements Remoting {
 
+    public final static ConcurrentHashMap<String, Channel> CHANNELS = new ConcurrentHashMap();
     private EventLoopGroup eventLoopGroup;
     private Bootstrap bootstrap;
-
-    public final static ConcurrentHashMap<String, Channel> CHANNELS = new ConcurrentHashMap();
 
     @Override
     public void start() {

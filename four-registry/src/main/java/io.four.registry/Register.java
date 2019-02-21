@@ -8,12 +8,12 @@ import io.four.registry.config.HostWithWeight;
 public interface Register {
 
     /**
-     *register service to config center
+     * register service to config center
      */
     void register(String serverName, HostWithWeight host);
 
     /**
      * unRegister service
      */
-    void unRegister(String address,String app, HostWithWeight host);
+    void unRegister(String address, String app, HostWithWeight host);
 }

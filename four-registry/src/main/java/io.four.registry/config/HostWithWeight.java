@@ -26,7 +26,7 @@ public class HostWithWeight {
     }
 
     public static List<HostWithWeight> buildHWWs(List<String> strings) {
-        if(strings == null || strings.size() < 1) {
+        if (strings == null || strings.size() < 1) {
             return null;
         }
         List list = new CopyOnWriteArrayList();
@@ -38,7 +38,7 @@ public class HostWithWeight {
 
     @Override
     public String toString() {
-        return  host + "@" + weight;
+        return host + "@" + weight;
     }
 
     public Host getHost() {

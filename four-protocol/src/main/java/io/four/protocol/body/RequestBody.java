@@ -5,6 +5,8 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.Arrays;
 
+import static io.four.protocol.four.ProtocolConstant.SERVERNAME_LENGTH;
+
 
 /**
  * @author TheLudlows
@@ -14,48 +16,53 @@ public class RequestBody extends ByteBufBody {
 
     private long requestId;
 
-    private long serviceId;
+    private long timestamp;
+
+    private String serviceName;
 
     private Object[] args;
 
-    private long timestamp;
-
-    public static Body toBody(ByteBuf buf) {
-        return new RequestBody(
-                buf.readLong(),
-                buf.readLong(),
-                buf.readLong(),
-                (Object[])serialize.byteBufToObject(buf, Object[].class));
-    }
-
-
-    @Override
-    protected void toByteBufImpl(ByteBuf byteBuf) {
-        byteBuf.writeLong(requestId);
-        byteBuf.writeLong(serviceId);
-        byteBuf.writeLong(timestamp);
-        serialize.objectToByteBuf(args, byteBuf);
-    }
-
-    public RequestBody(long requestId, long serviceId, long timestamp, Object[] args) {
+    public RequestBody(long requestId, long timestamp, String serviceName, Object[] args) {
         this.requestId = requestId;
-        this.serviceId = serviceId;
+        this.serviceName = serviceName;
         this.args = args;
         this.timestamp = timestamp;
     }
 
-    public RequestBody(long requestId, long serviceId, Object[] args) {
+
+    public RequestBody(long requestId, String serviceName, Object[] args) {
         this.requestId = requestId;
-        this.serviceId = serviceId;
+        this.serviceName = serviceName;
         this.args = args;
         this.timestamp = System.currentTimeMillis();
+    }
+
+    public static Body toBody(ByteBuf buf) {
+        long requestId = buf.readLong();
+        long timestamp = buf.readLong();
+        byte[] bytes = new byte[SERVERNAME_LENGTH];
+        buf.readBytes(bytes);
+        return new RequestBody(requestId, timestamp, new String(bytes),
+                (Object[]) serialize.byteBufToObject(buf, Object[].class));
+    }
+
+    @Override
+    protected void toByteBufImpl(ByteBuf byteBuf) {
+        byteBuf.writeLong(requestId);
+        byteBuf.writeLong(timestamp);
+        byte[] bytes = serviceName.getBytes();
+        byteBuf.writeBytes(bytes);
+        for (int i = 0; i < SERVERNAME_LENGTH - bytes.length; i++) {
+            byteBuf.writeByte(0);
+        }
+        serialize.objectToByteBuf(args, byteBuf);
     }
 
     @Override
     public String toString() {
         return "RequestBody{" +
                 "requestId=" + requestId +
-                ", serviceName='" + serviceId + '\'' +
+                ", serviceName='" + serviceName + '\'' +
                 ", args=" + Arrays.toString(args) +
                 ", timestamp=" + timestamp +
                 ", length=" + length +

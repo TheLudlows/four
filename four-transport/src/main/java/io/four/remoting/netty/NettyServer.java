@@ -3,7 +3,10 @@ package io.four.remoting.netty;
 import io.four.log.Log;
 import io.four.remoting.Remoting;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.WriteBufferWaterMark;
 import io.netty.channel.epoll.EpollChannelOption;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
@@ -18,24 +21,22 @@ import static io.four.platformutils.PlatformUtils.SUPPORT_EPOLL;
  * @since 0.1
  */
 public class NettyServer implements Remoting {
-    private  int port = 7777;
-    private  EventLoopGroup boss;
-    private  EventLoopGroup worker;
-
-    public static  boolean start = false;
-
+    public static boolean start = false;
+    private int port = 7777;
+    private EventLoopGroup boss;
+    private EventLoopGroup worker;
     private volatile Channel channel;
 
     @Override
-    public void start()  {
+    public void start() {
         synchronized (this) {
-            if(start) {
+            if (start) {
                 return;
             }
             start = true;
         }
 
-        if(SUPPORT_EPOLL) {
+        if (SUPPORT_EPOLL) {
             boss = new EpollEventLoopGroup(AVAILABLE_PROCESSORS);
             worker = new EpollEventLoopGroup(AVAILABLE_PROCESSORS << 1);
         } else {
@@ -43,7 +44,7 @@ public class NettyServer implements Remoting {
             worker = new NioEventLoopGroup(AVAILABLE_PROCESSORS << 1);
         }
         ServerBootstrap bootstrap = new ServerBootstrap();
-        bootstrap.group(boss,worker)
+        bootstrap.group(boss, worker)
                 .option(ChannelOption.SO_BACKLOG, 1024)
                 .option(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.SO_RCVBUF, 256 * 1024);
@@ -51,7 +52,7 @@ public class NettyServer implements Remoting {
         if (SUPPORT_EPOLL) {
             bootstrap.option(EpollChannelOption.SO_REUSEPORT, true);
             bootstrap.channel(EpollServerSocketChannel.class);
-        } else{
+        } else {
             bootstrap.channel(NioServerSocketChannel.class);
         }
 
@@ -64,7 +65,7 @@ public class NettyServer implements Remoting {
                         new WriteBufferWaterMark(1024 * 1024, 2048 * 1024));
         try {
             channel = bootstrap.bind(port).sync().channel();
-            Log.info("Server started. Listening on: "+ port);
+            Log.info("Server started. Listening on: " + port);
             channel.closeFuture().sync();
         } catch (InterruptedException e) {
             Log.warn("Server start failed!");

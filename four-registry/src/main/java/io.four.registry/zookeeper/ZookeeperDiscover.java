@@ -20,9 +20,9 @@ import static org.apache.curator.framework.recipes.cache.PathChildrenCache.Start
  * @author TheLudlows
  */
 public class ZookeeperDiscover implements Discover {
+    private static ConcurrentMap<String, List<HostWithWeight>> cacheMap;
     private String zkAddress;
     private CuratorFramework curator;
-    private static ConcurrentMap<String, List<HostWithWeight>> cacheMap;
 
     public ZookeeperDiscover(String zkAddress) {
         this.zkAddress = zkAddress;
@@ -46,7 +46,7 @@ public class ZookeeperDiscover implements Discover {
             Log.info("Get server failed:" + path);
         }
         registerWatcher(path);
-        if(list != null) {
+        if (list != null) {
             cacheMap.put(serviceName, list);
         }
         return list;
