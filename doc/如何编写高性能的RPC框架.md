@@ -21,6 +21,11 @@ RPC 服务端接收器接收客户端的调用请求，同样使用 Protocol 执
  */
 ```
 #### 4. 序列化
+
+一般的序列化工具只能将对象序列化入byte数组或者原生ByteBuf中，但是这不利于基于Netty传输，因此我们借鉴ByteBufInputStream,
+直接让FastJson/kryo将数据通过自定义的InputStream写入ByteBuf。并且自定义的InputStream可以复用。
+
+
 #### 5. 传输
 #### 6. 执行调用
 1. 效率提升
