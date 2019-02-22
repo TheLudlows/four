@@ -23,7 +23,7 @@ public class SerializeJMH {
         Options opt = new OptionsBuilder()
                 .include(SerializeJMH.class.getName())
                 .warmupIterations(10)
-                .measurementIterations(10)
+                .measurementIterations(20)
                 .threads(CONCURRENCY)
                 .forks(1)
                 .build();
@@ -32,6 +32,15 @@ public class SerializeJMH {
 
     }
 
+
+    @Benchmark
+    @BenchmarkMode({Mode.Throughput})
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void serializeFastJsonSlow() throws Exception {
+        buf.clear();
+        SerializerHolder.getFastJson().objectToByteBufSlow(new User(1), buf);
+        SerializerHolder.getFastJson().byteBufToObjectSlow(buf, User.class);
+    }
     @Benchmark
     @BenchmarkMode({Mode.Throughput})
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -41,12 +50,12 @@ public class SerializeJMH {
         SerializerHolder.getFastJson().byteBufToObject(buf, User.class);
     }
 
-    @Benchmark
+/*    @Benchmark
     @BenchmarkMode({Mode.Throughput})
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void serializeKryo() throws Exception {
         buf.clear();
         SerializerHolder.getKryo().objectToByteBuf(new User(1), buf);
         SerializerHolder.getKryo().byteBufToObject(buf, User.class);
-    }
+    }*/
 }

@@ -17,4 +17,8 @@ public interface Serialize<T> {
     void objectToByteBuf(T obj, ByteBuf out);
 
     T byteBufToObject(ByteBuf buf, Class<T> clazz);
+
+    Object byteBufToObjectSlow(ByteBuf buf, Class clazz);
+
+    void objectToByteBufSlow(Object obj, ByteBuf buf);
 }

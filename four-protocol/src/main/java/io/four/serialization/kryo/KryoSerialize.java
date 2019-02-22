@@ -14,7 +14,7 @@ import io.netty.buffer.ByteBufOutputStream;
  */
 public class KryoSerialize implements Serialize {
     private final static ThreadLocal<Kryo> HOLDER = ThreadLocal.withInitial(() -> new KryoRegister().registerKryo());
-    private final static ThreadLocal<Output> OUTPUTHOLDER = ThreadLocal.withInitial(() -> new Output());
+    private final static ThreadLocal<Output> OUTPUTHOLDER = ThreadLocal.withInitial(Output::new);
 
     @Override
     public void objectToByteBuf(Object obj, ByteBuf buf) {
@@ -38,6 +38,16 @@ public class KryoSerialize implements Serialize {
         Input input = new Input(new ByteBufInputStream(buf));
         Kryo kryo = HOLDER.get();
         return kryo.readObject(input, clazz);
+    }
+
+    @Override
+    public Object byteBufToObjectSlow(ByteBuf buf, Class clazz) {
+        return null;
+    }
+
+    @Override
+    public void objectToByteBufSlow(Object obj, ByteBuf buf) {
+
     }
 
     @Override
