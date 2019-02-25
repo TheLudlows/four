@@ -75,7 +75,7 @@
                 <version>1.7.25</version>
             </dependency>
             <dependency>
-                <groupId>repositor.org.javassist</groupId>
+                <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
                 <version>3.24.1-GA</version>
             </dependency>
