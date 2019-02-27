@@ -30,6 +30,9 @@
         <kryo.version>4.0.2</kryo.version>
         <junit.version>4.12</junit.version>
         <curator.version>2.12.0</curator.version>
+        <bytebuddy.version>1.2.3</bytebuddy.version>
+        <cglib.version>3.2.10</cglib.version>
+        <objenesis.version>2.1</objenesis.version>
     </properties>
 
     <dependencyManagement>
@@ -64,7 +67,7 @@
                 <artifactId>curator-recipes</artifactId>
                 <version>${curator.version}</version>
             </dependency>
-            <dependency>
+ <!--           <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>1.7.25</version>
@@ -73,12 +76,28 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-nop</artifactId>
                 <version>1.7.25</version>
-            </dependency>
+            </dependency>-->
             <dependency>
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
-                <version>3.24.1-GA</version>
+                <version>3.23.1-GA</version>
             </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${bytebuddy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>${cglib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.objenesis</groupId>
+                <artifactId>objenesis</artifactId>
+                <version>${objenesis.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

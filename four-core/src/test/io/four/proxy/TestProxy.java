@@ -1,6 +1,5 @@
 package io.four.proxy;
 
-import io.four.client.proxy.DefaultProxyFactory;
 import org.junit.Test;
 
 import java.util.concurrent.CompletableFuture;
@@ -14,13 +13,19 @@ public class TestProxy {
     public void testProxy() {
         try {
             Hell hell = DefaultProxyFactory.getProxy(Hell.class);
-            hell.say();
+            //hell.say();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+
     public interface Hell{
-        CompletableFuture say();
+        CompletableFuture say(int n,String a);
+        CompletableFuture gogo(Hell hell);
+    }
+    @Test
+    public void testJavassit() throws Exception {
+        JavassistInvoke.newFailFastProxy(Hell.class);
     }
 }

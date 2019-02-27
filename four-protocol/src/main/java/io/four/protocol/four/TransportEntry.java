@@ -12,11 +12,11 @@ import static io.four.protocol.four.ProtocolConstant.AGG;
 public class TransportEntry {
 
     private final byte agg = AGG;
-    Body body;
     private byte mType;
     private byte sType;
     private long messageId;
-    private int size;
+    private int bodyLength;
+    private Body body;
 
 
     public TransportEntry(byte mType, byte sType, long messageId, Body body) {
@@ -26,10 +26,10 @@ public class TransportEntry {
         this.body = body;
     }
 
-    public TransportEntry(byte mType, byte sType, int size, long messageId, Body body) {
+    public TransportEntry(byte mType, byte sType, int bodyLength, long messageId, Body body) {
         this.mType = mType;
         this.sType = sType;
-        this.size = size;
+        this.bodyLength = bodyLength;
         this.messageId = messageId;
         this.body = body;
     }
@@ -65,12 +65,12 @@ public class TransportEntry {
         return this;
     }
 
-    public int getSize() {
-        return size;
+    public int getBodyLength() {
+        return bodyLength;
     }
 
-    public TransportEntry setSize(int size) {
-        this.size = size;
+    public TransportEntry setBodyLength(int bodyLength) {
+        this.bodyLength = bodyLength;
         return this;
     }
 
@@ -79,8 +79,10 @@ public class TransportEntry {
         buf.writeByte(mType);
         buf.writeByte(sType);
         buf.writeLong(messageId);
-        this.size = body.bodyLength();
-        buf.writeInt(size);
+        int index = buf.writerIndex();
+        buf.writeInt(1);
+        body.toByteBuf(buf);
+        buf.setInt(index, body.bodyLength());
     }
 
     public Body getBody() {
@@ -94,7 +96,7 @@ public class TransportEntry {
                 ", mType=" + mType +
                 ", sType=" + sType +
                 ", messageId=" + messageId +
-                ", size=" + size +
+                ", size=" + bodyLength +
                 ", body=" + body.toString() +
                 '}';
     }

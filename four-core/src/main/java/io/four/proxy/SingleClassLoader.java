@@ -1,4 +1,4 @@
-package io.four.client.proxy;
+package io.four.proxy;
 
 /**
  * 单个类的类加载器

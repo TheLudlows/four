@@ -13,9 +13,6 @@ public class Encoder extends MessageToByteEncoder<TransportEntry> {
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, TransportEntry entry, ByteBuf byteBuf) throws Exception {
-
-        ByteBuf buf = entry.getBody().toByteBuf();
         entry.toByteBuf(byteBuf);
-        byteBuf.writeBytes(buf);
     }
 }

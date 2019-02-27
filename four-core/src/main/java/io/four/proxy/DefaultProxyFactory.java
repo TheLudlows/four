@@ -1,4 +1,4 @@
-package io.four.client.proxy;
+package io.four.proxy;
 
 import java.lang.reflect.Modifier;
 import java.util.Map;
@@ -32,6 +32,6 @@ public class DefaultProxyFactory {
         if (!Modifier.isPublic(clazz.getModifiers())) {
             throw new InvokeException("the clazz must be public");
         }
-
+        return null;
     }
 }

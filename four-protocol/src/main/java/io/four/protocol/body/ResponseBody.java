@@ -21,11 +21,11 @@ public class ResponseBody extends ByteBufBody {
         this.serviceResult = serviceResult;
     }
 
-    public static Body toBody(ByteBuf buf, Class resultClazz) {
+    public static Body toBody(ByteBuf buf) {
         if (buf == null) {
             throw new NullPointerException();
         }
-        return new ResponseBody(buf.readByte(), buf.readLong(), serialize.byteBufToObject(buf, resultClazz));
+        return new ResponseBody(buf.readByte(), buf.readLong(), serialize.byteBufToObject(buf, Object.class));
     }
 
     @Override

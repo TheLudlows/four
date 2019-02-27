@@ -1,4 +1,4 @@
-package io.four.client.proxy;
+package io.four.proxy;
 
 
 import java.util.List;

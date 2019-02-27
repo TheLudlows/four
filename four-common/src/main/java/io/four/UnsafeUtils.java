@@ -7,7 +7,7 @@ import sun.misc.Unsafe;
  * @author TheLudlows
  */
 public class UnsafeUtils {
-    final static private Unsafe UNSAFE;
+    private static final Unsafe UNSAFE;
 
     static {
         try {
@@ -20,7 +20,10 @@ public class UnsafeUtils {
         }
     }
 
-    public static final Unsafe unsafe() {
+    public static Unsafe unsafe() {
         return UNSAFE;
+    }
+
+    private UnsafeUtils() {
     }
 }

@@ -18,6 +18,6 @@ public class TestProtocol {
         Body body = new ResponseBody(SUCCESS.getCode(), 1L, SUCCESS.getDesc());
         body.toByteBuf(buf);
         System.out.println(body.bodyLength());
-        System.out.println(ResponseBody.toBody(buf, String.class));
+        System.out.println(ResponseBody.toBody(buf));
     }
 }

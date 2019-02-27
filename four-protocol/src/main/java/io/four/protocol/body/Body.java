@@ -15,8 +15,8 @@ public interface Body {
 
     ByteBuf toByteBuf(ByteBuf buf);
 
+    @Deprecated
     ByteBuf toByteBuf();
-
 
 }
 
@@ -24,7 +24,7 @@ abstract class ByteBufBody implements Body {
 
     protected static Serialize serialize = SerializerHolder.serialize();
 
-    public int length;
+    protected int length;
 
     @Override
     public int bodyLength() {
@@ -50,6 +50,9 @@ abstract class ByteBufBody implements Body {
         return buf;
     }
 
-
+    /**
+     * write date to netty
+     * @param byteBuf  {@link ByteBuf}
+     */
     protected abstract void toByteBufImpl(ByteBuf byteBuf);
 }

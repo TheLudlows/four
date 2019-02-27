@@ -1,20 +1,5 @@
-/*
- * Copyright (c) 2015 The Jupiter Project
- *
- * Licensed under the Apache License, version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
-package io.four.client.proxy;
+package io.four.proxy;
 
 import net.bytebuddy.ByteBuddy;
 import net.sf.cglib.proxy.Enhancer;
@@ -30,16 +15,20 @@ import static net.bytebuddy.matcher.ElementMatchers.not;
 
 
 public enum Proxies {
-    // JDK
-    JDK_PROXY (new ProxyDelegate() {
+    // BYTE BUDDY
+    BYTE_BUDDY(new ProxyDelegate() {
 
         @Override
         public <T> T newProxy(Class<T> interfaceType, Object handler) {
+            Class<? extends T> cls = new ByteBuddy()
+                    .subclass(interfaceType)
+                    .method(isDeclaredBy(interfaceType))
+                    .intercept(to(handler, "handler").filter(not(isDeclaredBy(Object.class))))
+                    .make()
+                    .load(interfaceType.getClassLoader(), INJECTION)
+                    .getLoaded();
 
-            Object object = Proxy.newProxyInstance(
-                    interfaceType.getClassLoader(), new Class<?>[] { interfaceType }, (InvocationHandler) handler);
-
-            return interfaceType.cast(object);
+            return Reflects.newInstance(cls);
         }
     }),
     // CGLIB
@@ -56,20 +45,16 @@ public enum Proxies {
             return interfaceType.cast(enhancer.create());
         }
     }),
-    // BYTE BUDDY
-    BYTE_BUDDY(new ProxyDelegate() {
+    //JDK
+    JDK_PROXY(new ProxyDelegate() {
 
         @Override
         public <T> T newProxy(Class<T> interfaceType, Object handler) {
-            Class<? extends T> cls = new ByteBuddy()
-                    .subclass(interfaceType)
-                    .method(isDeclaredBy(interfaceType))
-                    .intercept(to(handler, "handler").filter(not(isDeclaredBy(Object.class))))
-                    .make()
-                    .load(interfaceType.getClassLoader(), INJECTION)
-                    .getLoaded();
 
-            return cls.newInstance();
+            Object object = Proxy.newProxyInstance(
+                    interfaceType.getClassLoader(), new Class<?>[] { interfaceType }, (InvocationHandler) handler);
+
+            return interfaceType.cast(object);
         }
     });
 

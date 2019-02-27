@@ -16,14 +16,17 @@ package io.four.protocol.four;
  */
 
 
-public class ProtocolConstant {
+public interface ProtocolConstant {
 
-    public final static short AGG = 0x2F;
-    public final static byte FASTJSON = 0x1;
-    public final static byte KRYO = 0x2;
-    public final static byte REQUEST = 0x1;
-    public final static byte REPONSE = 0x2;
-    public final static byte HEARTBEAT = 0x4;
-    public final static int SERVERNAME_LENGTH = 0x40;
+    short AGG = 0x2F;
+    byte FASTJSON = 0x1;
+    byte KRYO = 0x2;
+    byte REQUEST = 0x1;
+    byte RESPONSE = 0x2;
+    byte HEARTBEAT = 0x4;
+    /**
+     * service name length
+     */
+    int SERVERNAME_LENGTH = 0x40;
 
 }

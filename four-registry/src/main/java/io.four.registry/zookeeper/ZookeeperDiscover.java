@@ -9,24 +9,23 @@ import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
-import static io.four.registry.config.HostWithWeight.buildHWW;
-import static io.four.registry.config.HostWithWeight.buildHWWs;
+import static io.four.registry.config.HostWithWeight.*;
+import static io.four.registry.config.RegistryConstant.*;
 import static org.apache.curator.framework.recipes.cache.PathChildrenCache.StartMode.BUILD_INITIAL_CACHE;
 
 /**
  * @author TheLudlows
  */
 public class ZookeeperDiscover implements Discover {
-    private static ConcurrentMap<String, List<HostWithWeight>> cacheMap;
+    private static Map<String, List<HostWithWeight>> cacheMap = new ConcurrentHashMap();
     private String zkAddress;
     private CuratorFramework curator;
 
     public ZookeeperDiscover(String zkAddress) {
         this.zkAddress = zkAddress;
-        cacheMap = new ConcurrentHashMap();
         curator = CuratorFrameworkFactory.newClient(zkAddress, 1000 * 10,
                 1000 * 3, new ForeverRetryPolicy());
         curator.start();
@@ -38,7 +37,7 @@ public class ZookeeperDiscover implements Discover {
         if (list != null && list.size() > 0) {
             return list;
         }
-        final String path = "/four/" + serviceName;
+        final String path = RPC_CONSTANTS + DEFAULT_ALIAS + serviceName;
         try {
             List<String> listStr = curator.getChildren().forPath(path);
             list = buildHWWs(listStr);
