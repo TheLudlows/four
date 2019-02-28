@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultProxyFactory {
     private static Map<Class, Object> methodInvokeCache = new ConcurrentHashMap();
-
+    private static ProxyInvoke proxyInvoke = new ProxyInvoke();
 
 
     @SuppressWarnings("unchecked")
@@ -32,6 +32,6 @@ public class DefaultProxyFactory {
         if (!Modifier.isPublic(clazz.getModifiers())) {
             throw new InvokeException("the clazz must be public");
         }
-        return null;
+        return JavassistProxy.newProxy(clazz, proxyInvoke);
     }
 }

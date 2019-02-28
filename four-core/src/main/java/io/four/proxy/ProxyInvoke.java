@@ -7,6 +7,7 @@ package io.four.proxy;
 public class ProxyInvoke {
 
     public Object invoke(String serviceName,Object[] params) {
+       // System.out.println("ProxyInvoke run");
         return null;
     }
 }

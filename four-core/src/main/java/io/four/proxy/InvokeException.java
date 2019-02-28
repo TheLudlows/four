@@ -4,9 +4,9 @@ package io.four.proxy;
  * @author TheLudlows
  */
 @SuppressWarnings("unChecked")
-public class InvokeException extends RuntimeException {
+class InvokeException extends RuntimeException {
 
-    public InvokeException(String msg) {
+    InvokeException(String msg) {
         super(msg);
     }
 }

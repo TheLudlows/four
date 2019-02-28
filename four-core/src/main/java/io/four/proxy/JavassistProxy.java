@@ -1,30 +1,20 @@
 package io.four.proxy;
 
-import io.four.Invoker;
 import javassist.*;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 /**
  * @author TheLudlows
  */
-public class JavassistInvoke implements Invoker {
-
-    private static final ProxyInvoke proxyInvoke = new ProxyInvoke();
-
-    @Override
-    public Object invoke(Object... params) {
-        return null;
-    }
+class JavassistProxy {
 
     @SuppressWarnings("unchecked")
-    public static <T> T newFailFastProxy(Class interfaceClass) throws Exception {
-
+    protected static <T> T newFailFastProxy(Class interfaceClass ) throws Exception {
         CtClass defaultImplCtClass = checkAndCreate(interfaceClass);
 
         for (Method method : interfaceClass.getMethods()) {
@@ -52,25 +42,22 @@ public class JavassistInvoke implements Invoker {
                 }
             }
             methodBuilder.append("){\r\n  throw new UnsupportedOperationException();\r\n}");
-            System.out.println(methodBuilder.toString());
             CtMethod m = CtNewMethod.make(methodBuilder.toString(), defaultImplCtClass);
             defaultImplCtClass.addMethod(m);
         }
-        byte[] bytes = defaultImplCtClass.toBytecode();
-        Class<?> invokerClass = SingleClassLoader.loadClass(Thread.currentThread().getContextClassLoader(), bytes);
+        Class<?> invokerClass = defaultImplCtClass.toClass();
         return (T) invokerClass.getConstructor().newInstance();
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T newProxy(Class interfaceClass) throws Exception {
+    protected static <T> T newProxy(Class interfaceClass, ProxyInvoke proxyInvoke) throws Exception {
         CtClass defaultImplCtClass = checkAndCreate(interfaceClass);
 
         List<String> methodList = createMethods(interfaceClass);
         for (String methodStr : methodList) {
-            defaultImplCtClass.addMethod(CtNewMethod.make(methodStr, defaultImplCtClass));
+            defaultImplCtClass.addMethod(CtMethod.make(methodStr, defaultImplCtClass));
         }
-        byte[] bytes = defaultImplCtClass.toBytecode();
-        Class<?> invokerClass = SingleClassLoader.loadClass(Thread.currentThread().getContextClassLoader(), bytes);
+        Class<?> invokerClass = defaultImplCtClass.toClass();
         Object object = invokerClass.getConstructor().newInstance();
         invokerClass.getField("proxyInvoke").set(object, proxyInvoke);
         return (T) object;
@@ -80,9 +67,9 @@ public class JavassistInvoke implements Invoker {
         Stream.of(clazz)
                 .flatMap((a) -> Stream.of(a.getMethods()))
                 .forEach((b) -> {
-                    if (!CompletableFuture.class.equals(b.getReturnType())) {
+                 /*   if (!CompletableFuture.class.equals(b.getReturnType())) {
                         throw new RuntimeException("method return-type must be CompletableFuture, " + b);
-                    }
+                    }*/
                     if (b.isDefault()) {
                         throw new RuntimeException("method access can't be default, " + b);
                     }
@@ -114,18 +101,20 @@ public class JavassistInvoke implements Invoker {
                     .append(m.getReturnType().getCanonicalName())
                     .append(" ")
                     .append(m.getName())
-                    .append("(");
+                    .append("( ");
 
             Class<?>[] parameterTypes = m.getParameterTypes();
             Class<?> returnType = m.getReturnType();
 
-            int c = 0;
+            int paramLength = 0;
             for (Class<?> type : parameterTypes) {
-                sb.append(type.getCanonicalName() + " arg" + (c++) + " ,");
+                sb.append(type.getCanonicalName() + " arg" + (paramLength++));
+                if (paramLength != parameterTypes.length) {
+                    sb.append(", ");
+                }
             }
-            sb.deleteCharAt(sb.length() - 1);
-
             sb.append(")");
+
             Class<?>[] exceptions = m.getExceptionTypes();
             if (exceptions.length > 0) {
                 sb.append(" throws ");
@@ -135,22 +124,21 @@ public class JavassistInvoke implements Invoker {
                 sb.deleteCharAt(sb.length() - 1);
             }
             sb.append("{")
-                    .append(" String serviceName = \"" + interfaceClass.getCanonicalName() + "\";")
-                    .append(" Object[] params = new Object[" + c + "];");
-            for (int i = 0; i < c; i++) {
-                sb.append("params[" + i + "] = arg" + i + ";");
+                    .append(" \r\n String serviceName = \"" + interfaceClass.getCanonicalName() + "\";")
+                    .append(" \r\n Object[] params = new Object[" + paramLength + "];")
+                    .append(" \r\n String methodName =\"" + m.getName() + "\";");
+
+            for (int i = 0; i < paramLength; i++) {
+                sb.append("\r\n params[" + i + "] = ($w)$" + (i + 1) + ";");
             }
-            sb.append(" Object response = " +
+            sb.append("\r\n Object response = " +
                     "proxyInvoke.invoke(serviceName, params);")
-                    .append(" return ");
+                    .append(" \r\n return ");
             if (returnType.equals(void.class)) {
-                sb.append(" return;");
             } else {
-                sb.append(buildReturn(returnType, "response"))
-                        .append(";");
+                sb.append(buildReturn(returnType, "response"));
             }
-            sb.append("}");
-            System.out.println(sb);
+            sb.append(";\r\n}");
             resultList.add(sb.toString());
             sb.delete(0, sb.length());
         }
