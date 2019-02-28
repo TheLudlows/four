@@ -1,5 +1,6 @@
 package io.four;
 
+import io.four.registry.config.Host;
 import io.four.registry.config.HostWithWeight;
 import io.four.registry.zookeeper.ZookeeperDiscover;
 import io.four.registry.zookeeper.ZookeeperRegister;
@@ -18,7 +19,7 @@ public class TestZK {
         String zkAddress = "localhost:2181";
         ZookeeperDiscover discover = new ZookeeperDiscover(zkAddress);
         long start = System.currentTimeMillis();
-        List<HostWithWeight> list = discover.discover("service00001");
+        List<Host> list = discover.discover("service00001");
         //System.out.println(list.get(0));
         try {
             System.in.read();

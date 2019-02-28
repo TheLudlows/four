@@ -1,6 +1,8 @@
 package io.four.proxy;
 
 
+import io.four.registry.config.Host;
+
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -11,13 +13,13 @@ import static io.four.registry.zookeeper.ZookeeperCenter.DISCOVER;
  */
 public interface LoadBalance {
 
-    int next();
+    Host next();
 }
 
 abstract class BaseLoadBalance implements LoadBalance {
 
     protected String serviceName;
-    protected List hostList;
+    protected List<Host> hostList;
 
     protected BaseLoadBalance(String serviceName) {
         this.serviceName = serviceName;
@@ -38,9 +40,9 @@ class DefaultLoadBalance extends BaseLoadBalance {
     }
 
     @Override
-    public int next() {
+    public Host next() {
         final int n = index.getAndIncrement();
         final int length = hostList.size();
-        return n % length;
+        return hostList.get(n % length);
     }
 }

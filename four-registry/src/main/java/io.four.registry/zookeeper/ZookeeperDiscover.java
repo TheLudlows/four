@@ -2,6 +2,7 @@ package io.four.registry.zookeeper;
 
 import io.four.log.Log;
 import io.four.registry.Discover;
+import io.four.registry.config.Host;
 import io.four.registry.config.HostWithWeight;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -32,7 +33,7 @@ public class ZookeeperDiscover implements Discover {
     }
 
     @Override
-    public List<HostWithWeight> discover(String serviceName) {
+    public List<Host> discover(String serviceName) {
         List list = cacheMap.get(serviceName);
         if (list != null && list.size() > 0) {
             return list;

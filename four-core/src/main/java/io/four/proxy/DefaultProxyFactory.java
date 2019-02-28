@@ -9,15 +9,19 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 
 public class DefaultProxyFactory {
-    private static Map<Class, Object> methodInvokeCache = new ConcurrentHashMap();
+
+    private static Map<Class, Object> proxyCache = new ConcurrentHashMap();
     private static ProxyInvoke proxyInvoke = new ProxyInvoke();
 
 
     @SuppressWarnings("unchecked")
     public static  <T> T getProxy(Class clazz) throws Exception {
-        T t = (T) methodInvokeCache.get(clazz);
+        T t = (T) proxyCache.get(clazz);
         if (t == null) {
             t = newInstance(clazz);
+            if(t != null) {
+                proxyCache.put(clazz, t);
+            }
         }
         return t;
     }

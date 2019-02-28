@@ -3,26 +3,22 @@ package io.four.registry.config;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class HostWithWeight {
-    private Host host;
+public class HostWithWeight extends Host {
     private int weight;
 
     public HostWithWeight(String address, int port, int weight) {
-        host = new Host(address, port);
+        super(address, port);
         this.weight = weight;
     }
 
-    public HostWithWeight() {
-    }
-
-    public HostWithWeight(Host host, int weight) {
-        this.host = host;
+    public HostWithWeight(String host, int weight) {
+        super(host);
         this.weight = weight;
     }
 
     public static HostWithWeight buildHWW(String string) {
         String[] str = string.split("@");
-        return new HostWithWeight().setHost(new Host(str[0])).setWeight(Integer.parseInt(str[1]));
+        return new HostWithWeight(str[0], Integer.parseInt(str[1]));
     }
 
     public static List<HostWithWeight> buildHWWs(List<String> strings) {
@@ -38,17 +34,9 @@ public class HostWithWeight {
 
     @Override
     public String toString() {
-        return host + "@" + weight;
+        return super.toString() + "@" + weight;
     }
 
-    public Host getHost() {
-        return host;
-    }
-
-    public HostWithWeight setHost(Host host) {
-        this.host = host;
-        return this;
-    }
 
     public int getWeight() {
         return weight;

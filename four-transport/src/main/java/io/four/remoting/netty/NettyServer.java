@@ -68,9 +68,8 @@ public class NettyServer implements Remoting {
             Log.info("Server started. Listening on: " + port);
             channel.closeFuture().sync();
         } catch (InterruptedException e) {
-            Log.warn("Server start failed!");
+            Log.warn("Server start failed!", e);
         }
-
 
     }
 

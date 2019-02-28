@@ -21,7 +21,7 @@ public class TestTransport {
 
         String[] str = new String[1];
         str[0] = "hhhhhh";
-        client.send(requestEntry(1231232, str), address);
+        client.send(requestEntry("123", str), address);
         System.in.read();
     }
 

@@ -2,7 +2,7 @@ package io.four.registry.zookeeper;
 
 import io.four.log.Log;
 import io.four.registry.Register;
-import io.four.registry.config.HostWithWeight;
+import io.four.registry.config.Host;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
@@ -36,11 +36,10 @@ public class ZookeeperRegister implements Register {
     public ZookeeperRegister(String zkAddress, String alias) {
         this(zkAddress);
         this.alias = alias;
-
     }
 
     @Override
-    public void register(String serviceName, HostWithWeight host) {
+    public void register(String serviceName, Host host) {
         Objects.requireNonNull(serviceName);
         final String path = RPC_CONSTANTS + alias + serviceName + "/" + host.toString();
         try {
@@ -68,7 +67,7 @@ public class ZookeeperRegister implements Register {
     }
 
     @Override
-    public void unRegister(String address, String serviceName, HostWithWeight host) {
+    public void unRegister(String address, String serviceName, Host host) {
         final String path = RPC_CONSTANTS + alias + serviceName + "/" + host.toString();
         try {
             curator.delete().forPath(path);
@@ -77,7 +76,7 @@ public class ZookeeperRegister implements Register {
         }
     }
 
-    private void addRegister(String serviceName, HostWithWeight host) {
+    private void addRegister(String serviceName, Host host) {
         final String path = RPC_CONSTANTS + alias + serviceName + "/" + host.toString();
         if (cacheMap.containsKey(path)) {
             return;
