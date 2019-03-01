@@ -34,7 +34,7 @@ public class TestProxy {
         long start2 = System.currentTimeMillis();
         Hell hell2 = DefaultProxyFactory.getProxy(Hell.class);
         System.out.println("CglibProxy new " + (System.currentTimeMillis() - start2));
-        long start3 = System.currentTimeMillis();
+       /* long start3 = System.currentTimeMillis();
         for (int i = 0; i < 10000; i++) {
             hell1.gogo();
         }
@@ -43,8 +43,8 @@ public class TestProxy {
         long start4 = System.currentTimeMillis();
         for (int i = 0; i < 100000; i++) {
             hell2.gogo();
-        }
-        System.out.println("cglib exe " + (System.currentTimeMillis() - start4));
+        }*/
+        //System.out.println("cglib exe " + (System.currentTimeMillis() - start4));
 
     }
 

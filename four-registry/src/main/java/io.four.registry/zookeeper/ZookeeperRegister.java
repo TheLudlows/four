@@ -13,7 +13,6 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import static io.four.registry.config.RegistryConstant.DEFAULT_ALIAS;
 import static io.four.registry.config.RegistryConstant.RPC_CONSTANTS;
 
 /**
@@ -24,7 +23,6 @@ public class ZookeeperRegister implements Register {
     private static ConcurrentMap<String, PathChildrenCache> cacheMap = new ConcurrentHashMap();
     private CuratorFramework curator;
     private String zkAddress;
-    private String alias = DEFAULT_ALIAS;
 
     public ZookeeperRegister(String zkAddress) {
         this.zkAddress = zkAddress;
@@ -33,15 +31,10 @@ public class ZookeeperRegister implements Register {
         curator.start();
     }
 
-    public ZookeeperRegister(String zkAddress, String alias) {
-        this(zkAddress);
-        this.alias = alias;
-    }
-
     @Override
     public void register(String serviceName, Host host) {
         Objects.requireNonNull(serviceName);
-        final String path = RPC_CONSTANTS + alias + serviceName + "/" + host.toString();
+        final String path = RPC_CONSTANTS + "/" + serviceName + "/" + host.toString();
         try {
             if (curator.checkExists().forPath(path) != null) {
                 curator.delete().forPath(path);
@@ -67,8 +60,8 @@ public class ZookeeperRegister implements Register {
     }
 
     @Override
-    public void unRegister(String address, String serviceName, Host host) {
-        final String path = RPC_CONSTANTS + alias + serviceName + "/" + host.toString();
+    public void unRegister(String serviceName, Host host) {
+        final String path = RPC_CONSTANTS + "/" + serviceName + "/" + host.toString();
         try {
             curator.delete().forPath(path);
         } catch (Exception e) {
@@ -77,7 +70,7 @@ public class ZookeeperRegister implements Register {
     }
 
     private void addRegister(String serviceName, Host host) {
-        final String path = RPC_CONSTANTS + alias + serviceName + "/" + host.toString();
+        final String path = RPC_CONSTANTS + "/" + serviceName + "/" + host.toString();
         if (cacheMap.containsKey(path)) {
             return;
         }
@@ -106,4 +99,7 @@ public class ZookeeperRegister implements Register {
         }
     }
 
+    public String getZkAddress() {
+        return zkAddress;
+    }
 }

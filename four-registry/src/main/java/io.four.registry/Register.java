@@ -15,5 +15,5 @@ public interface Register {
     /**
      * unRegister service
      */
-    void unRegister(String address, String app, Host host);
+    void unRegister(String app, Host host);
 }

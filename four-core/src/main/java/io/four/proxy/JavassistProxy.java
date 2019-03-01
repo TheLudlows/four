@@ -134,8 +134,7 @@ class JavassistProxy {
             sb.append("\r\n Object response = " +
                     "proxyInvoke.invoke(serviceName, params);")
                     .append(" \r\n return ");
-            if (returnType.equals(void.class)) {
-            } else {
+            if (!returnType.equals(void.class)) {
                 sb.append(buildReturn(returnType, "response"));
             }
             sb.append(";\r\n}");

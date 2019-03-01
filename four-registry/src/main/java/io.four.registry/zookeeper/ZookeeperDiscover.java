@@ -8,6 +8,8 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
+import org.apache.curator.retry.RetryForever;
+
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +30,7 @@ public class ZookeeperDiscover implements Discover {
     public ZookeeperDiscover(String zkAddress) {
         this.zkAddress = zkAddress;
         curator = CuratorFrameworkFactory.newClient(zkAddress, 1000 * 10,
-                1000 * 3, new ForeverRetryPolicy());
+                100, new RetryForever(1000));
         curator.start();
     }
 
