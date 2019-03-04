@@ -1,4 +1,4 @@
-package io.four.protocol.body;
+package io.four.protocol.four;
 
 import io.netty.buffer.ByteBuf;
 
@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf;
  * @author TheLudlows
  * @since 0.1
  */
-public class ResponseBody extends ByteBufBody {
+public class Response extends BaseMessage {
 
     private byte status;
 
@@ -15,17 +15,20 @@ public class ResponseBody extends ByteBufBody {
 
     private Object serviceResult;
 
-    public ResponseBody(byte status, long requestId, Object serviceResult) {
+    public Response() {
+    }
+
+    public Response(byte status, long requestId, Object serviceResult) {
         this.status = status;
         this.requestId = requestId;
         this.serviceResult = serviceResult;
     }
 
-    public static Body toBody(ByteBuf buf) {
+    public static Response response(ByteBuf buf, Response response) {
         if (buf == null) {
             throw new NullPointerException();
         }
-        return new ResponseBody(buf.readByte(), buf.readLong(), serialize.byteBufToObject(buf, Object.class));
+        return new Response(buf.readByte(), buf.readLong(), serialize.byteBufToObject(buf, Object.class));
     }
 
     @Override
@@ -39,7 +42,7 @@ public class ResponseBody extends ByteBufBody {
         return status;
     }
 
-    public ResponseBody setStatus(byte status) {
+    public Response setStatus(byte status) {
         this.status = status;
         return this;
     }
@@ -48,7 +51,7 @@ public class ResponseBody extends ByteBufBody {
         return requestId;
     }
 
-    public ResponseBody setRequestId(long requestId) {
+    public Response setRequestId(long requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -57,14 +60,14 @@ public class ResponseBody extends ByteBufBody {
         return serviceResult;
     }
 
-    public ResponseBody setServiceResult(Object serviceResult) {
+    public Response setServiceResult(Object serviceResult) {
         this.serviceResult = serviceResult;
         return this;
     }
 
     @Override
     public String toString() {
-        return "ResponseBody{" +
+        return "Response{" +
                 "status=" + status +
                 ", requestId=" + requestId +
                 ", serviceResult=" + serviceResult +

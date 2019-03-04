@@ -1,7 +1,7 @@
 package io.four.remoting.netty;
 
 import io.four.log.Log;
-import io.four.protocol.four.TransportEntry;
+import io.four.protocol.four.Response;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -10,11 +10,11 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * @author TheLudlows
  * @since 0.1
  */
-public class ClientHandler extends SimpleChannelInboundHandler<TransportEntry> {
+public class ClientHandler extends SimpleChannelInboundHandler<Response> {
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, TransportEntry entry) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, Response entry) throws Exception {
     }
 
     @Override

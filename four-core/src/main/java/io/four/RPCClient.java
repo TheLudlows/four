@@ -1,0 +1,46 @@
+package io.four;
+
+
+import io.four.log.Log;
+import io.four.protocol.four.TransportEntry;
+import io.four.proxy.LoadBalance;
+import io.four.proxy.NoAliveProviderException;
+import io.four.proxy.ProxyInvoke;
+import io.four.registry.config.Host;
+import io.four.remoting.netty.NettyClient;
+import io.netty.channel.Channel;
+
+import java.util.concurrent.CompletableFuture;
+
+public class RPCClient {
+
+    private static NettyClient nettyClient = new NettyClient();
+
+    public static void init() {
+        // register init
+        // discover init
+        nettyClient.start();
+    }
+
+    public static CompletableFuture<TransportEntry> send(TransportEntry request, ProxyInvoke proxyInvoke) throws NoAliveProviderException {
+        Channel channel = null;
+        LoadBalance loadBalance = proxyInvoke.getLoadBalance();
+        Host host;
+        try {
+            host = loadBalance.next();
+            channel = nettyClient.connect(host);
+        } catch (Exception e) {
+            for (int i = 0; i < loadBalance.hostsSize(); i++) {
+                try {
+                    channel = nettyClient.connect(loadBalance.next());
+                }catch (Exception e1) {
+                    Log.warn("No alive Provider",e1);
+                    throw e1;
+                }
+            }
+        }
+        channel.writeAndFlush(request);
+
+        return null;
+    }
+}

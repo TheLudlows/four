@@ -1,4 +1,4 @@
-package io.four.protocol.body;
+package io.four.protocol.four;
 
 /**
  * @author TheLudlows

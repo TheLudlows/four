@@ -6,7 +6,6 @@ RPC 服务提供者通过 Service Manager 发布到注册中心，同时暴露�
 代理封装调用信息并将调用转交给 Invoker 去实际执行。在客户端的Invoker 通过 Protocol 对调用信息编码协议消息，通过传输模块传送至服务提供方。
 
 RPC 服务端接收器接收客户端的调用请求，同样使用 Protocol 执行协议解码。解码后的调用信息传递给 Processor去控制处理调用过程，最后再委托调用给 Invoker 去实际执行并返回调用结果。
-#### 2. 代理
 #### 3. 协议
 传输协议主要是为了解决粘包拆包问题，以及序列化的方式、工具的版本等问题。
 ```java
@@ -24,7 +23,10 @@ RPC 服务端接收器接收客户端的调用请求，同样使用 Protocol 执
 
 一般的序列化工具只能将对象序列化入byte数组或者原生ByteBuf中，但是这不利于基于Netty传输，因此我们借鉴ByteBufInputStream,
 直接让FastJson/kryo将数据通过自定义的InputStream写入ByteBuf。并且自定义的InputStream可以复用。
-
+#### 4. Client代理
+如何做到对一个接口的调用？显然通过代理的方式，然而在Java中存在多种可以实现代理的方式，JDK提供的动态代理，CGlib动态代理，以及Javassist实现代理。
+鉴于调用性能的考虑，默认采用的是使用Javassist的代理方式。说白了其实就是在内存中构建出了实现接口的实现类，在实现类中调用了ProxyInvoke的invoke方法。
+参考了Dubbo的方式，对Invoke进行增加了InvokeChain,在InvokeChain中对调用增加逻辑上的处理。比如数据的统计，流量控制等。
 
 #### 5. 传输
 #### 6. 执行调用

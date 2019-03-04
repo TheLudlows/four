@@ -1,6 +1,7 @@
 package io.four.remoting.netty;
 
-import io.four.protocol.four.TransportEntry;
+import io.four.protocol.four.Request;
+import io.four.registry.config.Host;
 import io.four.remoting.Remoting;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -22,7 +23,7 @@ import static io.four.platformutils.PlatformUtils.SUPPORT_EPOLL;
  */
 public class NettyClient implements Remoting {
 
-    public final static ConcurrentHashMap<String, Channel> CHANNELS = new ConcurrentHashMap();
+    public final static ConcurrentHashMap<Host, Channel> CHANNELS = new ConcurrentHashMap();
     private EventLoopGroup eventLoopGroup;
     private Bootstrap bootstrap;
 
@@ -54,20 +55,19 @@ public class NettyClient implements Remoting {
 
     }
 
-    public Channel connect(String address) {
-        if (!channelExist(address)) {
-            doConnect(address);
+    public Channel connect(Host host) {
+        if (!channelActive(host)) {
+            doConnect(host);
         }
-        return CHANNELS.get(address);
+        return CHANNELS.get(host);
     }
 
-    private void doConnect(String address) {
-        String[] s = address.split(":");
-        InetSocketAddress isa = new InetSocketAddress(s[0], Integer.valueOf(s[1]));
+    private void doConnect(Host host) {
+        InetSocketAddress isa = new InetSocketAddress(host.getIp(), host.getPort());
         Channel channel = null;
 
         synchronized (this) {
-            if (channelExist(address)) {
+            if (channelActive(host)) {
                 return;
             }
             try {
@@ -75,15 +75,15 @@ public class NettyClient implements Remoting {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            CHANNELS.put(address, channel);
+            CHANNELS.put(host, channel);
         }
     }
 
-    boolean channelExist(String address) {
-        Channel channel = CHANNELS.get(address);
+    public boolean channelActive(Host host) {
+        Channel channel = CHANNELS.get(host);
         if (channel != null) {
             if (!channel.isActive()) {
-                CHANNELS.remove(address);
+                CHANNELS.remove(host);
                 channel.close();
                 return false;
             } else {
@@ -93,8 +93,8 @@ public class NettyClient implements Remoting {
         return false;
     }
 
-    public ChannelFuture send(TransportEntry entry, String address) {
-        Channel channel = connect(address);
-        return channel.writeAndFlush(entry);
+    public ChannelFuture send(Request request, Host host) {
+        Channel channel = connect(host);
+        return channel.writeAndFlush(request);
     }
 }

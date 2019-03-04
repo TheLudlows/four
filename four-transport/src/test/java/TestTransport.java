@@ -1,10 +1,11 @@
+import io.four.protocol.four.Request;
+import io.four.registry.config.Host;
 import io.four.remoting.netty.NettyClient;
 import io.four.remoting.netty.NettyServer;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static io.four.protocol.four.EntryBuilder.requestEntry;
 
 
 /**
@@ -14,14 +15,14 @@ import static io.four.protocol.four.EntryBuilder.requestEntry;
 public class TestTransport {
     @Test
     public void client() throws InterruptedException, IOException {
-        String address = "localhost:7777";
+        Host host = new Host("localhost:7777");
         NettyClient client = new NettyClient();
         client.start();
-        client.connect(address);
+        client.connect(host);
 
         String[] str = new String[1];
         str[0] = "hhhhhh";
-        client.send(requestEntry("123", str), address);
+        client.send(new Request(1,"123", str), host);
         System.in.read();
     }
 

@@ -12,7 +12,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public interface LoadBalance {
 
-    Host next();
+    Host next() throws NoAliveProviderException;
+
+    Host removeAndNext() throws NoAliveProviderException;
+
+    int hostsSize();
 }
 
 abstract class BaseLoadBalance implements LoadBalance {
@@ -25,6 +29,10 @@ abstract class BaseLoadBalance implements LoadBalance {
 
     public List<Host> getHostList() {
         return hostList;
+    }
+
+    public int hostsSize() {
+        return hostList.size();
     }
 
 }
@@ -41,9 +49,18 @@ class DefaultLoadBalance extends BaseLoadBalance {
     }
 
     @Override
-    public Host next() {
+    public Host next() throws NoAliveProviderException {
+        if(getHostList() == null || getHostList().size() == 0) {
+            throw new NoAliveProviderException("No alive provider exception");
+        }
         final int n = index.getAndIncrement();
         final int length = getHostList().size();
         return getHostList().get(n % length);
+    }
+
+    @Override
+    public Host removeAndNext() throws NoAliveProviderException {
+        getHostList().remove(index);
+        return next();
     }
 }

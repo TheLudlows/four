@@ -1,7 +1,7 @@
 package io.four.remoting.netty;
 
-import io.four.codec.Decoder;
-import io.four.codec.Encoder;
+import io.four.codec.server.Decoder;
+import io.four.codec.server.Encoder;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 
