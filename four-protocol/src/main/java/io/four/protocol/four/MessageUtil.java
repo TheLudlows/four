@@ -39,13 +39,11 @@ public class MessageUtil {
         byte sType = buf.readByte();
         long messageId = buf.readLong();
         int size = buf.readInt();
-        checkBodySize(size);
         Request request = request(buf, REQUEST_RECYCLE.get());
         return (Request) request.setmType(mType)
                 .setsType(sType)
                 .setBodyLength(size)
                 .setMessageId(messageId);
-
     }
 
     public static Response toResponse(ByteBuf buf) throws TransportException {
@@ -57,7 +55,6 @@ public class MessageUtil {
         byte sType = buf.readByte();
         long messageId = buf.readLong();
         int size = buf.readInt();
-        checkBodySize(size);
         Response response = response(buf, RESPONSE_RECYCLE.get());
         return (Response) response.setmType(mType)
                 .setsType(sType)
@@ -65,12 +62,6 @@ public class MessageUtil {
                 .setMessageId(messageId);
     }
 
-
-    private static void checkBodySize(int size) throws TransportException {
-        if (size > MAX_MESSAGE_SIZE) {
-            throw new TransportException("body of request is bigger than limit value " + MAX_MESSAGE_SIZE);
-        }
-    }
 
     public static void writeRequest(Request request, ByteBuf buf) {
         request.toByteBuf(buf);

@@ -40,7 +40,9 @@ public class Response extends BaseMessage {
         if (buf == null) {
             throw new NullPointerException();
         }
-        return new Response(buf.readByte(), buf.readLong(), serialize.byteBufToObject(buf, Object.class));
+        return response.setStatus(buf.readByte())
+        .setRequestId(buf.readLong())
+        .setServiceResult(serialize.byteBufToObject(buf, Object.class));
     }
 
     @Override
