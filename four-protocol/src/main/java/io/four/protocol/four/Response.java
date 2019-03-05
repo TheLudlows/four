@@ -1,6 +1,7 @@
 package io.four.protocol.four;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.util.Recycler;
 
 
 /**
@@ -14,6 +15,17 @@ public class Response extends BaseMessage {
     private long requestId;
 
     private Object serviceResult;
+
+    private transient Recycler.Handle handle;
+
+    protected Response(Recycler.Handle handle) {
+        this.handle = handle;
+    }
+
+    public void recycle() {
+        serviceResult = null;
+        handle.recycle(this);
+    }
 
     public Response() {
     }

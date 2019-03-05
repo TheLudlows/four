@@ -23,6 +23,11 @@ public class TestTransport {
         String[] str = new String[1];
         str[0] = "hhhhhh";
         client.send(new Request(1,"123", str), host);
+        client.send(new Request(1,"124", str), host);
+        client.send(new Request(1,"125", str), host);
+        client.send(new Request(1,"126", str), host);
+        client.send(new Request(1,"127", str), host);
+
         System.in.read();
     }
 

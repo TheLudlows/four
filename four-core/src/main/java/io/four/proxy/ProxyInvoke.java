@@ -3,8 +3,9 @@ package io.four.proxy;
 import io.four.InvokeChain.InvokeChain;
 import io.four.RPCClient;
 import io.four.config.BaseConfig;
-import io.four.protocol.four.EntryBuilder;
-import io.four.protocol.four.TransportEntry;
+
+import io.four.protocol.four.MessageUtil;
+import io.four.protocol.four.Request;
 import io.four.registry.config.Host;
 
 /**
@@ -21,7 +22,9 @@ public class ProxyInvoke {
 
     public Object invoke(String serviceName, Object[] params) throws NoAliveProviderException {
         // recycle
-        TransportEntry entry = EntryBuilder.requestEntry(serviceName, params);
+        Request request = MessageUtil.getRequest();
+        request.setServiceName(serviceName)
+                .setArgs(params);
         Host host;
         if (loadBalance == null) {
             throw new NoAliveProviderException("No alive provider for" + serviceName);
@@ -34,7 +37,7 @@ public class ProxyInvoke {
             }
         }
         // FilterChain.invoke
-        return RPCClient.send(entry, this);
+        return RPCClient.send(request, this);
     }
 
     protected ProxyInvoke(String serviceName, BaseConfig baseConfig) {

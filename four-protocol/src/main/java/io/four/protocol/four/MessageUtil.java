@@ -2,6 +2,7 @@ package io.four.protocol.four;
 
 import io.four.exception.TransportException;
 import io.netty.buffer.ByteBuf;
+import io.netty.util.Recycler;
 
 import static io.four.protocol.four.Request.request;
 import static io.four.protocol.four.Response.response;
@@ -12,7 +13,22 @@ import static io.four.protocol.four.Response.response;
  * @since 0.1
  */
 public class MessageUtil {
-    private static final int MAX_BODY_SIZE = 1024 << 4;
+
+    private static final int MAX_MESSAGE_SIZE = Integer.MAX_VALUE;
+
+    private static final Recycler<Request> REQUEST_RECYCLE = new Recycler<Request>() {
+        @Override
+        protected Request newObject(Handle<Request> handle) {
+            return new Request(handle);
+        }
+    };
+
+    private static final Recycler<Response> RESPONSE_RECYCLE = new Recycler<Response>() {
+        @Override
+        protected Response newObject(Handle<Response> handle) {
+            return new Response(handle);
+        }
+    };
 
     public static Request toRequest(ByteBuf buf) throws TransportException {
         if (buf == null) {
@@ -24,9 +40,7 @@ public class MessageUtil {
         long messageId = buf.readLong();
         int size = buf.readInt();
         checkBodySize(size);
-        Request request = new Request();
-        request(buf, request);
-
+        Request request = request(buf, REQUEST_RECYCLE.get());
         return (Request) request.setmType(mType)
                 .setsType(sType)
                 .setBodyLength(size)
@@ -44,8 +58,7 @@ public class MessageUtil {
         long messageId = buf.readLong();
         int size = buf.readInt();
         checkBodySize(size);
-        Response response = new Response();
-        response(buf, response);
+        Response response = response(buf, RESPONSE_RECYCLE.get());
         return (Response) response.setmType(mType)
                 .setsType(sType)
                 .setBodyLength(size)
@@ -54,8 +67,25 @@ public class MessageUtil {
 
 
     private static void checkBodySize(int size) throws TransportException {
-        if (size > MAX_BODY_SIZE) {
-            throw new TransportException("body of request is bigger than limit value " + MAX_BODY_SIZE);
+        if (size > MAX_MESSAGE_SIZE) {
+            throw new TransportException("body of request is bigger than limit value " + MAX_MESSAGE_SIZE);
         }
     }
+
+    public static void writeRequest(Request request, ByteBuf buf) {
+        request.toByteBuf(buf);
+    }
+
+    public static void writeResponse(Response response, ByteBuf buf) {
+        response.toByteBuf(buf);
+    }
+
+    public static Request getRequest() {
+        return REQUEST_RECYCLE.get();
+    }
+
+    public static Response getResponse() {
+        return RESPONSE_RECYCLE.get();
+    }
+
 }

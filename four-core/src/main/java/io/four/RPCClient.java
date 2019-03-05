@@ -2,7 +2,8 @@ package io.four;
 
 
 import io.four.log.Log;
-import io.four.protocol.four.TransportEntry;
+import io.four.protocol.four.Request;
+import io.four.protocol.four.Response;
 import io.four.proxy.LoadBalance;
 import io.four.proxy.NoAliveProviderException;
 import io.four.proxy.ProxyInvoke;
@@ -22,7 +23,7 @@ public class RPCClient {
         nettyClient.start();
     }
 
-    public static CompletableFuture<TransportEntry> send(TransportEntry request, ProxyInvoke proxyInvoke) throws NoAliveProviderException {
+    public static CompletableFuture<Response> send(Request request, ProxyInvoke proxyInvoke) throws NoAliveProviderException {
         Channel channel = null;
         LoadBalance loadBalance = proxyInvoke.getLoadBalance();
         Host host;

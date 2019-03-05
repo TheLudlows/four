@@ -12,7 +12,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class ServerHandler extends SimpleChannelInboundHandler<Request> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Request request) throws Exception {
-        Log.info("received from " + ctx.channel().remoteAddress() + "data:" + request.toString());
+        Log.info("received from " + ctx.channel().remoteAddress() + " data:" + request.toString());
     }
 
     @Override

@@ -2,6 +2,7 @@ package io.four.protocol.four;
 
 
 import io.netty.buffer.ByteBuf;
+import io.netty.util.Recycler;
 
 import java.util.Arrays;
 
@@ -21,6 +22,19 @@ public class Request extends BaseMessage {
     private String serviceName;
 
     private Object[] args;
+
+    private Recycler.Handle<Request> handle;
+
+    public void recycle() {
+        args = null;
+        serviceName = null;
+        handle.recycle(this);
+    }
+
+    protected Request(Recycler.Handle handle) {
+        this.handle = handle;
+    }
+
 
     public long getRequestId() {
         return requestId;
@@ -78,7 +92,7 @@ public class Request extends BaseMessage {
         this.timestamp = System.currentTimeMillis();
     }
 
-    public static Message request(ByteBuf buf, Request request) {
+    public static Request request(ByteBuf buf, Request request) {
         long requestId = buf.readLong();
         long timeStamp = buf.readLong();
         byte[] bytes = new byte[SERVERNAME_LENGTH];
