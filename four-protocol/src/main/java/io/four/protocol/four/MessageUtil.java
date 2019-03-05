@@ -34,7 +34,7 @@ public class MessageUtil {
         if (buf == null) {
             throw new NullPointerException();
         }
-        buf.readByte();//AGG
+        buf.readShort();//AGG
         byte mType = buf.readByte();
         byte sType = buf.readByte();
         long messageId = buf.readLong();
@@ -50,7 +50,7 @@ public class MessageUtil {
         if (buf == null) {
             throw new NullPointerException();
         }
-        buf.readByte();//AGG
+        buf.readShort();//AGG
         byte mType = buf.readByte();
         byte sType = buf.readByte();
         long messageId = buf.readLong();

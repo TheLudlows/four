@@ -30,4 +30,6 @@ public interface ProtocolConstant {
      */
     int SERVERNAME_LENGTH = 0x40;
 
+    byte[]  SERVERNAME_BYTES = new byte[SERVERNAME_LENGTH];
+
 }

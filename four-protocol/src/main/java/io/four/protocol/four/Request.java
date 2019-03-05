@@ -110,16 +110,14 @@ public class Request extends BaseMessage {
         byteBuf.writeLong(timestamp);
         byte[] bytes = serviceName.getBytes();
         byteBuf.writeBytes(bytes);
-        for (int i = 0; i < SERVERNAME_LENGTH - bytes.length; i++) {
-            byteBuf.writeByte(0);
-        }
+        byteBuf.writeBytes(SERVERNAME_BYTES, 0, SERVERNAME_LENGTH - bytes.length);
         serialize.objectToByteBuf(args, byteBuf);
     }
 
     @Override
     public String toString() {
-        return "Request{" +
-                "requestId=" + requestId +
+        return "Request{" + super.toString() +
+                ",requestId=" + requestId +
                 ", serviceName='" + serviceName + '\'' +
                 ", args=" + Arrays.toString(args) +
                 ", timestamp=" + timestamp +

@@ -2,6 +2,8 @@ import io.four.protocol.four.Request;
 import io.four.registry.config.Host;
 import io.four.remoting.netty.NettyClient;
 import io.four.remoting.netty.NettyServer;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -15,7 +17,7 @@ import java.io.IOException;
 public class TestTransport {
     @Test
     public void client() throws InterruptedException, IOException {
-        Host host = new Host("localhost:7777");
+        Host host = new Host("127.0.0.1:7777");
         NettyClient client = new NettyClient();
         client.start();
         client.connect(host);
@@ -24,9 +26,6 @@ public class TestTransport {
         str[0] = "hhhhhh";
         client.send(new Request(1,"123", str), host);
         client.send(new Request(1,"124", str), host);
-        client.send(new Request(1,"125", str), host);
-        client.send(new Request(1,"126", str), host);
-        client.send(new Request(1,"127", str), host);
 
         System.in.read();
     }
@@ -35,6 +34,18 @@ public class TestTransport {
     public void server() {
         NettyServer server = new NettyServer();
         server.start();
+    }
+
+    @Test
+
+    public void testLength() {
+        byte[] bytes = new byte[64];
+        ByteBuf buf = ByteBufAllocator.DEFAULT.buffer();
+
+        String test = "abc";
+        buf.writeBytes(test.getBytes());
+        buf.writeBytes(bytes,0,64-test.length());
+        System.out.println(buf);
     }
 
 }

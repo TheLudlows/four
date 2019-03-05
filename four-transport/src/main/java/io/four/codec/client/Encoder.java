@@ -1,5 +1,6 @@
 package io.four.codec.client;
 
+import io.four.log.Log;
 import io.four.protocol.four.Request;
 
 import io.netty.buffer.ByteBuf;
@@ -15,5 +16,6 @@ public class Encoder extends MessageToByteEncoder<Request> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Request request, ByteBuf byteBuf) throws Exception {
         request.toByteBuf(byteBuf);
+        Log.info("Write to bytebuf:"+request.toString());
     }
 }

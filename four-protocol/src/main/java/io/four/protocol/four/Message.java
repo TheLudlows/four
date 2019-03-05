@@ -21,7 +21,7 @@ abstract class BaseMessage implements Message {
     protected static Serialize serialize = SerializerHolder.serialize();
 
     //message head
-    protected final byte agg = AGG;
+    protected final short agg = AGG;
     protected byte mType;
     protected byte sType;
     protected long messageId;
@@ -36,11 +36,11 @@ abstract class BaseMessage implements Message {
         this.messageId = messageId;
     }
 
-    public byte getAgg() {
+    public short getAgg() {
         return agg;
     }
 
-    public byte getmType() {
+    public short getmType() {
         return mType;
     }
 
@@ -83,7 +83,7 @@ abstract class BaseMessage implements Message {
         if (buf == null) {
             throw new NullPointerException();
         }
-        buf.writeByte(agg);
+        buf.writeShort(agg);
         buf.writeByte(mType);
         buf.writeByte(sType);
         buf.writeLong(messageId);
@@ -101,4 +101,15 @@ abstract class BaseMessage implements Message {
      * @param byteBuf  {@link ByteBuf}
      */
     protected abstract void toByteBufImpl(ByteBuf byteBuf);
+
+    @Override
+    public String toString() {
+        return
+                "agg=" + agg +
+                ", mType=" + mType +
+                ", sType=" + sType +
+                ", messageId=" + messageId +
+                ", bodyLength=" + bodyLength;
+
+    }
 }
