@@ -24,6 +24,6 @@ public class Decoder extends LengthFieldBasedFrameDecoder {
         ByteBuf buf = (ByteBuf) super.decode(ctx, in);
         Response response = MessageUtil.toResponse(buf);
         Log.info(response.toString());
-        return response;
+        return null;
     }
 }

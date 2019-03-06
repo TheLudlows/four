@@ -23,10 +23,10 @@ public class RPCClient {
         nettyClient.init();
     }
 
-    public static CompletableFuture<Response> send(Request request, ProxyInvoke proxyInvoke) throws NoAliveProviderException {
+    public static CompletableFuture send(Request request, ProxyInvoke proxyInvoke) throws NoAliveProviderException {
         Channel channel = null;
         LoadBalance loadBalance = proxyInvoke.getLoadBalance();
-        CompletableFuture future = new CompletableFuture();
+        InvokeFuture future = new InvokeFuture();
         Host host;
         try {
             host = loadBalance.next();
@@ -41,7 +41,11 @@ public class RPCClient {
                 }
             }
         }
+        assert channel != null;
         channel.writeAndFlush(request);
-        return future;
+        InvokeFuturePool.add(future);
+        return future.setTime(request.getRequestId())
+                .setTime(request.getTimestamp());
+
     }
 }

@@ -14,5 +14,6 @@ public class Encoder extends MessageToByteEncoder<Response> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Response response, ByteBuf byteBuf) throws Exception {
         response.toByteBuf(byteBuf);
+        response.recycle();
     }
 }
