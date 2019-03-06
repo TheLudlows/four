@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBufAllocator;
 import org.junit.Test;
 
 import java.io.IOException;
-
+import java.lang.reflect.Method;
 
 
 /**
@@ -46,6 +46,15 @@ public class TestTransport {
         buf.writeBytes(test.getBytes());
         buf.writeBytes(bytes,0,64-test.length());
         System.out.println(buf);
+    }
+
+    @Test
+    public void getMethodName() {
+        Class clazz = TestTransport.class;
+        Method[] methods = clazz.getDeclaredMethods();
+        for(Method method:methods) {
+            System.out.println(method.getName());
+        }
     }
 
 }

@@ -20,7 +20,7 @@ abstract class BaseMessage implements Message {
 
     protected static Serialize serialize = SerializerHolder.serialize();
 
-    //message head
+    // message head
     protected final short agg = AGG;
     protected byte mType;
     protected byte sType;

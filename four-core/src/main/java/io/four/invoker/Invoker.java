@@ -1,4 +1,4 @@
-package io.four;
+package io.four.invoker;
 
 /**
  * Invoker is used to call the service
@@ -7,5 +7,4 @@ package io.four;
 public interface Invoker<T> {
 
     T invoke(Object... params);
-
 }

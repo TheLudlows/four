@@ -2,6 +2,7 @@ package io.four.remoting.netty;
 
 import io.four.log.Log;
 import io.four.protocol.four.Request;
+import io.four.protocol.four.Response;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -13,7 +14,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Request> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Request request) throws Exception {
         Log.info("received from " + ctx.channel().remoteAddress() + " data:" + request.toString());
-
+        ctx.writeAndFlush(new Response((byte)1,2,"result"));
     }
 
     @Override

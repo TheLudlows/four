@@ -27,6 +27,10 @@ abstract class BaseLoadBalance implements LoadBalance {
         this.hostList = ZookeeperCenter.discover(serviceName);
     }
 
+    public BaseLoadBalance(List list) {
+        this.hostList = list;
+    }
+
     public List<Host> getHostList() {
         return hostList;
     }
@@ -37,30 +41,3 @@ abstract class BaseLoadBalance implements LoadBalance {
 
 }
 
-/**
- * robin load balance
- */
-class DefaultLoadBalance extends BaseLoadBalance {
-
-    private AtomicInteger index = new AtomicInteger();
-
-    public DefaultLoadBalance(String serviceName) {
-        super(serviceName);
-    }
-
-    @Override
-    public Host next() throws NoAliveProviderException {
-        if(getHostList() == null || getHostList().size() == 0) {
-            throw new NoAliveProviderException("No alive provider exception");
-        }
-        final int n = index.getAndIncrement();
-        final int length = getHostList().size();
-        return getHostList().get(n % length);
-    }
-
-    @Override
-    public Host removeAndNext() throws NoAliveProviderException {
-        getHostList().remove(index);
-        return next();
-    }
-}

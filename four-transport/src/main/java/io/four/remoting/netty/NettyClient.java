@@ -2,7 +2,6 @@ package io.four.remoting.netty;
 
 import io.four.protocol.four.Request;
 import io.four.registry.config.Host;
-import io.four.remoting.Remoting;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.epoll.EpollChannelOption;
@@ -21,14 +20,13 @@ import static io.four.platformutils.PlatformUtils.SUPPORT_EPOLL;
  * @author TheLudlows
  * @since 0.1
  */
-public class NettyClient implements Remoting {
+public class NettyClient {
 
     public final static ConcurrentHashMap<Host, Channel> CHANNELS = new ConcurrentHashMap();
     private EventLoopGroup eventLoopGroup;
     private Bootstrap bootstrap;
 
-    @Override
-    public void start() {
+    public void init() {
         eventLoopGroup = SUPPORT_EPOLL ?
                 new EpollEventLoopGroup(AVAILABLE_PROCESSORS) : new NioEventLoopGroup(AVAILABLE_PROCESSORS);
 
@@ -50,7 +48,6 @@ public class NettyClient implements Remoting {
         bootstrap.handler(new ClientChannelInitializer());
     }
 
-    @Override
     public void close() {
 
     }

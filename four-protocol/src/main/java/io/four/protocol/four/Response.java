@@ -3,6 +3,9 @@ package io.four.protocol.four;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
 
+import static io.four.protocol.four.ProtocolConstant.FASTJSON;
+import static io.four.protocol.four.ProtocolConstant.REQUEST;
+
 
 /**
  * @author TheLudlows
@@ -31,6 +34,7 @@ public class Response extends BaseMessage {
     }
 
     public Response(byte status, long requestId, Object serviceResult) {
+        super(REQUEST, FASTJSON, requestId);
         this.status = status;
         this.requestId = requestId;
         this.serviceResult = serviceResult;

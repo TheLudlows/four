@@ -1,7 +1,6 @@
 package io.four.remoting.netty;
 
 import io.four.log.Log;
-import io.four.remoting.Remoting;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
@@ -20,14 +19,13 @@ import static io.four.platformutils.PlatformUtils.SUPPORT_EPOLL;
  * @author TheLudlows
  * @since 0.1
  */
-public class NettyServer implements Remoting {
+public class NettyServer {
     private static boolean start = false;
     private int port = 7777;
     private EventLoopGroup boss;
     private EventLoopGroup worker;
     private volatile Channel channel;
 
-    @Override
     public void start() {
         synchronized (this) {
             if (start) {
@@ -73,7 +71,6 @@ public class NettyServer implements Remoting {
 
     }
 
-    @Override
     public void close() {
         try {
             channel.closeFuture().sync();

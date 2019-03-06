@@ -16,6 +16,6 @@ public class Encoder extends MessageToByteEncoder<Request> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Request request, ByteBuf byteBuf) throws Exception {
         request.toByteBuf(byteBuf);
-        Log.info("Write to bytebuf:"+request.toString());
+        //Log.info("Write to bytebuf:"+request.toString());
     }
 }

@@ -14,7 +14,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Response> {
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Response entry) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, Response response) throws Exception {
+        //Log.info("Received data:" + response.toString());
     }
 
     @Override

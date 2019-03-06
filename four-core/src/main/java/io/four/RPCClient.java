@@ -20,28 +20,28 @@ public class RPCClient {
     public static void init() {
         // register init
         // discover init
-        nettyClient.start();
+        nettyClient.init();
     }
 
     public static CompletableFuture<Response> send(Request request, ProxyInvoke proxyInvoke) throws NoAliveProviderException {
         Channel channel = null;
         LoadBalance loadBalance = proxyInvoke.getLoadBalance();
+        CompletableFuture future = new CompletableFuture();
         Host host;
         try {
             host = loadBalance.next();
             channel = nettyClient.connect(host);
         } catch (Exception e) {
             for (int i = 0; i < loadBalance.hostsSize(); i++) {
+                host = loadBalance.next();
                 try {
                     channel = nettyClient.connect(loadBalance.next());
-                }catch (Exception e1) {
-                    Log.warn("No alive Provider",e1);
-                    throw e1;
+                } catch (Exception e1) {
+                    Log.info("The Provider Not alive " + host.toString());
                 }
             }
         }
         channel.writeAndFlush(request);
-
-        return null;
+        return future;
     }
 }
