@@ -58,7 +58,6 @@ public class MessageUtil {
                 .setBodyLength(size);
     }
 
-
     public static void writeRequest(Request request, ByteBuf buf) {
         request.toByteBuf(buf);
     }

@@ -27,7 +27,7 @@ public class Response extends BaseMessage {
     }
 
     public Response() {
-        super();
+        super(REQUEST, FASTJSON);
     }
 
     public void recycle() {

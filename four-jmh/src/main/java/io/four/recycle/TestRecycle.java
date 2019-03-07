@@ -10,9 +10,6 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 import java.util.concurrent.TimeUnit;
 
-import static io.four.protocol.four.ProtocolConstant.FASTJSON;
-import static io.four.protocol.four.ProtocolConstant.RESPONSE;
-
 @State(Scope.Thread)
 
 public class TestRecycle {
@@ -36,8 +33,6 @@ public class TestRecycle {
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public Response newResponse() {
         Response response = new Response();
-        response.setsType(FASTJSON);
-        response.setmType(RESPONSE);
         return response;
     }
 
