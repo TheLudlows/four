@@ -3,7 +3,7 @@ package io.four.invoke;
 public class UserServiceImpl implements UserService {
     @Override
     public String getName(String hello) {
-        return hello+":four";
+        return hello + ":four";
     }
 
     @Override

@@ -41,6 +41,7 @@ public class SerializeJMH {
         SerializerHolder.getFastJson().objectToByteBufSlow(new User(1), buf);
         SerializerHolder.getFastJson().byteBufToObjectSlow(buf, User.class);
     }
+
     @Benchmark
     @BenchmarkMode({Mode.Throughput})
     @OutputTimeUnit(TimeUnit.MILLISECONDS)

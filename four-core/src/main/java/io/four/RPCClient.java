@@ -3,19 +3,21 @@ package io.four;
 
 import io.four.log.Log;
 import io.four.protocol.four.Request;
-import io.four.protocol.four.Response;
 import io.four.proxy.LoadBalance;
-import io.four.proxy.NoAliveProviderException;
+import io.four.exception.NoAliveProviderException;
 import io.four.proxy.ProxyInvoke;
 import io.four.registry.config.Host;
 import io.four.remoting.netty.NettyClient;
+import io.four.rpcHandler.ClientChannelInitializer;
 import io.netty.channel.Channel;
 
 import java.util.concurrent.CompletableFuture;
 
 public class RPCClient {
 
-    private static NettyClient nettyClient = new NettyClient();
+
+
+    private static NettyClient nettyClient = new NettyClient(new ClientChannelInitializer());
 
     public static void init() {
         // register init
@@ -26,7 +28,6 @@ public class RPCClient {
     public static CompletableFuture send(Request request, ProxyInvoke proxyInvoke) throws NoAliveProviderException {
         Channel channel = null;
         LoadBalance loadBalance = proxyInvoke.getLoadBalance();
-        InvokeFuture future = new InvokeFuture();
         Host host;
         try {
             host = loadBalance.next();
@@ -43,9 +44,6 @@ public class RPCClient {
         }
         assert channel != null;
         channel.writeAndFlush(request);
-        InvokeFuturePool.add(future);
-        return future.setTime(request.getRequestId())
-                .setTime(request.getTimestamp());
-
+        return InvokeFuturePool.add(request);
     }
 }

@@ -1,4 +1,4 @@
-package io.four.proxy;
+package io.four.exception;
 
 public class NoAliveProviderException extends Exception {
     public NoAliveProviderException(String s) {

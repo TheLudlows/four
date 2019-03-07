@@ -1,7 +1,8 @@
-package io.four.remoting.netty;
+package io.four.rpcHandler;
 
 import io.four.codec.client.Decoder;
 import io.four.codec.client.Encoder;
+import io.four.remoting.netty.ClientHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 

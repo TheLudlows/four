@@ -4,6 +4,8 @@ import io.four.exception.TransportException;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import static io.four.protocol.four.Request.request;
 import static io.four.protocol.four.Response.response;
 
@@ -13,9 +15,7 @@ import static io.four.protocol.four.Response.response;
  * @since 0.1
  */
 public class MessageUtil {
-
-    private static final int MAX_MESSAGE_SIZE = Integer.MAX_VALUE;
-
+    private static AtomicLong ID_ADDER = new AtomicLong();
     private static final Recycler<Request> REQUEST_RECYCLE = new Recycler<Request>() {
         @Override
         protected Request newObject(Handle<Request> handle) {
@@ -30,20 +30,18 @@ public class MessageUtil {
         }
     };
 
-    public static Request toRequest(ByteBuf buf) throws TransportException {
+    public static Request toRequest(ByteBuf buf) {
         if (buf == null) {
             throw new NullPointerException();
         }
         buf.readShort();//AGG
         byte mType = buf.readByte();
         byte sType = buf.readByte();
-        long messageId = buf.readLong();
         int size = buf.readInt();
         Request request = request(buf, REQUEST_RECYCLE.get());
         return (Request) request.setmType(mType)
                 .setsType(sType)
-                .setBodyLength(size)
-                .setMessageId(messageId);
+                .setBodyLength(size);
     }
 
     public static Response toResponse(ByteBuf buf) throws TransportException {
@@ -53,13 +51,11 @@ public class MessageUtil {
         buf.readShort();//AGG
         byte mType = buf.readByte();
         byte sType = buf.readByte();
-        long messageId = buf.readLong();
         int size = buf.readInt();
         Response response = response(buf, RESPONSE_RECYCLE.get());
         return (Response) response.setmType(mType)
                 .setsType(sType)
-                .setBodyLength(size)
-                .setMessageId(messageId);
+                .setBodyLength(size);
     }
 
 
@@ -72,7 +68,8 @@ public class MessageUtil {
     }
 
     public static Request getRequest() {
-        return REQUEST_RECYCLE.get();
+        return REQUEST_RECYCLE.get()
+                .setRequestId(ID_ADDER.getAndIncrement());
     }
 
     public static Response getResponse() {

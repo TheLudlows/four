@@ -2,10 +2,7 @@ package io.four.remoting.netty;
 
 import io.four.log.Log;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.WriteBufferWaterMark;
+import io.netty.channel.*;
 import io.netty.channel.epoll.EpollChannelOption;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
@@ -25,7 +22,12 @@ public class NettyServer {
     private EventLoopGroup boss;
     private EventLoopGroup worker;
     private volatile Channel channel;
+    private ChannelHandler handler;
 
+    public NettyServer(ChannelHandler handler, int port) {
+        this.port = port;
+        this.handler = handler;
+    }
     public void start() {
         synchronized (this) {
             if (start) {
@@ -54,7 +56,7 @@ public class NettyServer {
             bootstrap.channel(NioServerSocketChannel.class);
         }
 
-        bootstrap.childHandler(new ServerChannelInitializer());
+        bootstrap.childHandler(handler);
 
         bootstrap.childOption(ChannelOption.SO_REUSEADDR, true)
                 .childOption(ChannelOption.SO_RCVBUF, 256 * 1024)

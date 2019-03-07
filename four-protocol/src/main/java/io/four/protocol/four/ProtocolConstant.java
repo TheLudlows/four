@@ -1,18 +1,17 @@
 package io.four.protocol.four;
 
 /**
- * ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┐
- *     2   │   1    │    1   │     8     │       4
- * ├ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ──  ┤
- * │       │        │        │           |
- * │   Agg    M Type  S Type    MessageId    Body Size        │
- * │       │        │        │           |
- * └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ -┘
+ * ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┐
+ *     2   │   1    │    1   │       4
+ * ├ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─  ─ ─ ─ ─ ─ ─ ──  ┤
+ * │       │        │        │
+ * │   Agg    M Type  S Type     Body Size      │
+ * │       │        │        │
+ * └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ -┘
  * <p>
  * Agg: colorful agg Might be 0 or 1
  * M Type: Message Type request/response/heat beat
  * S Type: Serialize Type
- * MessageId: 消息Id
  */
 
 
@@ -24,7 +23,7 @@ public interface ProtocolConstant {
     byte REQUEST = 0x1;
     byte RESPONSE = 0x2;
     byte HEARTBEAT = 0x4;
-    int HEAD_LENGGTH = 0xc;
+    int HEAD_LENGGTH = 0x8;
     /**
      * service name length
      */

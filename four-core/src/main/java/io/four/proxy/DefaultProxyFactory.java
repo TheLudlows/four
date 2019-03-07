@@ -34,13 +34,13 @@ public class DefaultProxyFactory {
 
     private static <T> T newInstance(Class clazz, ConsumerConfig config) throws Exception {
         if (clazz == null) {
-            throw new InvokeException("clazz cannot be null");
+            throw new RuntimeException("clazz cannot be null");
         }
         if (!clazz.isInterface()) {
-            throw new InvokeException("the clazz must be interface");
+            throw new RuntimeException("the clazz must be interface");
         }
         if (!Modifier.isPublic(clazz.getModifiers())) {
-            throw new InvokeException("the clazz must be public");
+            throw new RuntimeException("the clazz must be public");
         }
         return JavassistProxy.newProxy(clazz, new ProxyInvoke(clazz.getName(), config));
     }

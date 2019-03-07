@@ -22,22 +22,17 @@ public class Response extends BaseMessage {
     private transient Recycler.Handle handle;
 
     protected Response(Recycler.Handle handle) {
+        super(REQUEST, FASTJSON);
         this.handle = handle;
+    }
+
+    public Response() {
+        super();
     }
 
     public void recycle() {
         serviceResult = null;
         handle.recycle(this);
-    }
-
-    public Response() {
-    }
-
-    public Response(byte status, long requestId, Object serviceResult) {
-        super(REQUEST, FASTJSON, requestId);
-        this.status = status;
-        this.requestId = requestId;
-        this.serviceResult = serviceResult;
     }
 
     public static Response response(ByteBuf buf, Response response) {
@@ -85,8 +80,8 @@ public class Response extends BaseMessage {
 
     @Override
     public String toString() {
-        return "Response{" +
-                "status=" + status +
+        return "Response{" + super.toString()+
+                ", status=" + status +
                 ", requestId=" + requestId +
                 ", serviceResult=" + serviceResult +
                 '}';

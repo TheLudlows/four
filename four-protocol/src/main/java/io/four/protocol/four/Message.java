@@ -24,16 +24,14 @@ abstract class BaseMessage implements Message {
     protected final short agg = AGG;
     protected byte mType;
     protected byte sType;
-    protected long messageId;
     protected int bodyLength;
 
     public BaseMessage() {
     }
 
-    public BaseMessage(byte mType, byte sType, long messageId) {
+    public BaseMessage(byte mType, byte sType) {
         this.mType = mType;
         this.sType = sType;
-        this.messageId = messageId;
     }
 
     public short getAgg() {
@@ -69,15 +67,6 @@ abstract class BaseMessage implements Message {
 
     }
 
-    public long getMessageId() {
-        return messageId;
-    }
-
-    public BaseMessage setMessageId(long messageId) {
-        this.messageId = messageId;
-        return this;
-    }
-
     @Override
     public ByteBuf toByteBuf(ByteBuf buf) {
         if (buf == null) {
@@ -86,7 +75,6 @@ abstract class BaseMessage implements Message {
         buf.writeShort(agg);
         buf.writeByte(mType);
         buf.writeByte(sType);
-        buf.writeLong(messageId);
         int index = buf.writerIndex();
         buf.writeInt(1);
         int start = buf.writerIndex();
@@ -108,7 +96,6 @@ abstract class BaseMessage implements Message {
                 "agg=" + agg +
                 ", mType=" + mType +
                 ", sType=" + sType +
-                ", messageId=" + messageId +
                 ", bodyLength=" + bodyLength;
 
     }

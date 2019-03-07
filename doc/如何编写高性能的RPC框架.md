@@ -36,3 +36,19 @@ RPC 服务端接收器接收客户端的调用请求，同样使用 Protocol 执
    当我们导出多个远程接口时，如何避免单一接口调用占据所有线程资源，而引发其他接口执行阻塞。
 3. 超时控制
    当某个接口执行缓慢，而 client 端已经超时放弃等待后，server 端的线程继续执行此时显得毫无意义
+
+
+TODO
+
+JDK11 String新特性提升高String性能
+
+
+Recycle 的合理使用
+注意栈上分配的感扰。测试代码把对象的引用放在方法内部，发生栈上分配，接近于百倍的效率于堆上分配。
+
+Benchmark                 Mode  Cnt    Score   Error   Units
+TestRecycle.getRequest   thrpt   10   54.246 ± 0.538  ops/us
+TestRecycle.getResponse  thrpt   10  171.616 ± 0.397  ops/us
+TestRecycle.newResponse  thrpt   10   77.026 ± 3.010  ops/us
+
+可以看出利用高Recycle 接近于直接创建的2.5被性能

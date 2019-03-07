@@ -4,6 +4,7 @@ import io.four.InvokeChain.InvokeChain;
 import io.four.RPCClient;
 import io.four.config.BaseConfig;
 
+import io.four.exception.NoAliveProviderException;
 import io.four.protocol.four.MessageUtil;
 import io.four.protocol.four.Request;
 import io.four.registry.config.Host;

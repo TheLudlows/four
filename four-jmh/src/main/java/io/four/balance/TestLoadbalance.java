@@ -3,9 +3,6 @@ package io.four.balance;
 import io.four.proxy.DefaultLoadBalance;
 import io.four.proxy.LoadBalance;
 import io.four.registry.config.Host;
-import io.four.serialization.SerializerHolder;
-import io.four.serialize.SerializeJMH;
-import io.four.serialize.User;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
@@ -24,6 +21,7 @@ public class TestLoadbalance {
 
     static List<Host> list = new ArrayList();
     static LoadBalance balance = new DefaultLoadBalance(list);
+
     static {
         list.add(new Host("loadhost:8080"));
         list.add(new Host("loadhost:8080"));
@@ -33,6 +31,7 @@ public class TestLoadbalance {
         list.add(new Host("loadhost:8080"));
         list.add(new Host("loadhost:8080"));
     }
+
     public static void main(String[] args) throws RunnerException {
 
         Options opt = new OptionsBuilder()
@@ -50,7 +49,7 @@ public class TestLoadbalance {
     @BenchmarkMode({Mode.Throughput})
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public void next() throws Exception {
-       balance.next();
+        balance.next();
     }
 
 }

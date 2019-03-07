@@ -1,6 +1,7 @@
 package io.four.protocol.four;
 
 
+import io.four.TimeUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
 
@@ -21,6 +22,8 @@ public class Request extends BaseMessage {
 
     private String serviceName;
 
+    private byte methodIndex;
+
     private Object[] args;
 
     private Recycler.Handle<Request> handle;
@@ -32,9 +35,9 @@ public class Request extends BaseMessage {
     }
 
     protected Request(Recycler.Handle handle) {
+        super(REQUEST, FASTJSON);
         this.handle = handle;
     }
-
 
     public long getRequestId() {
         return requestId;
@@ -63,6 +66,15 @@ public class Request extends BaseMessage {
         return this;
     }
 
+    public byte getMethodIndex() {
+        return methodIndex;
+    }
+
+    public Request setMethodIndex(byte methodIndex) {
+        this.methodIndex = methodIndex;
+        return this;
+    }
+
     public Object[] getArgs() {
         return args;
     }
@@ -75,32 +87,17 @@ public class Request extends BaseMessage {
     public Request() {
     }
 
-    public Request(long requestId, long timestamp, String serviceName, Object[] args) {
-        super(REQUEST, FASTJSON, requestId);
-        this.requestId = requestId;
-        this.serviceName = serviceName;
-        this.args = args;
-        this.timestamp = timestamp;
-    }
-
-
-    public Request(long requestId, String serviceName, Object[] args) {
-        super(REQUEST, FASTJSON, requestId);
-        this.requestId = requestId;
-        this.serviceName = serviceName;
-        this.args = args;
-        this.timestamp = System.currentTimeMillis();
-    }
-
     public static Request request(ByteBuf buf, Request request) {
         long requestId = buf.readLong();
         long timeStamp = buf.readLong();
         byte[] bytes = new byte[SERVERNAME_LENGTH];
         buf.readBytes(bytes);
-        Object[] params = (Object[])serialize.byteBufToObject(buf, Object[].class);
+        byte methodId = buf.readByte();
+        Object[] params = (Object[]) serialize.byteBufToObject(buf, Object[].class);
         return request.setRequestId(requestId)
                 .setTimestamp(timeStamp)
                 .setServiceName(new String(bytes))
+                .setMethodIndex(methodId)
                 .setArgs(params);
     }
 
@@ -111,6 +108,7 @@ public class Request extends BaseMessage {
         byte[] bytes = serviceName.getBytes();
         byteBuf.writeBytes(bytes);
         byteBuf.writeBytes(SERVERNAME_BYTES, 0, SERVERNAME_LENGTH - bytes.length);
+        byteBuf.writeByte(methodIndex);
         serialize.objectToByteBuf(args, byteBuf);
     }
 
@@ -118,6 +116,7 @@ public class Request extends BaseMessage {
     public String toString() {
         return "Request{" + super.toString() +
                 ",requestId=" + requestId +
+                ", methodindex=" + methodIndex +
                 ", serviceName='" + serviceName + '\'' +
                 ", args=" + Arrays.toString(args) +
                 ", timestamp=" + timestamp +

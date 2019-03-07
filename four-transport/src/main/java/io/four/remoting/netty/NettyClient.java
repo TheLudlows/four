@@ -25,6 +25,12 @@ public class NettyClient {
     public final static ConcurrentHashMap<Host, Channel> CHANNELS = new ConcurrentHashMap();
     private EventLoopGroup eventLoopGroup;
     private Bootstrap bootstrap;
+    private ChannelHandler handler;
+
+    public NettyClient(ChannelHandler handler) {
+        this.handler = handler;
+        init();
+    }
 
     public void init() {
         eventLoopGroup = SUPPORT_EPOLL ?
@@ -45,7 +51,7 @@ public class NettyClient {
             bootstrap.channel(NioSocketChannel.class);
         }
 
-        bootstrap.handler(new ClientChannelInitializer());
+        bootstrap.handler(handler);
     }
 
     public void close() {

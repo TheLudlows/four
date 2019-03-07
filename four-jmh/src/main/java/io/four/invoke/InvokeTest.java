@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class InvokeTest {
     static Method[] methods = UserService.class.getMethods();
     static UserService userService = new UserServiceImpl();
-    static JavassistInvoker invoker = new JavassistInvoker(userService,methods[0],UserService.class);
+    static JavassistInvoker invoker = new JavassistInvoker(userService, methods[0], UserService.class);
 
     @Benchmark
     @BenchmarkMode({Mode.Throughput})
@@ -30,6 +30,7 @@ public class InvokeTest {
     public void javassistInvoke() {
         invoker.invoke("hello");
     }
+
     @Benchmark
     @BenchmarkMode({Mode.Throughput})
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
