@@ -3,9 +3,11 @@ package io.four.proxy;
 import javassist.*;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 /**
@@ -14,7 +16,7 @@ import java.util.stream.Stream;
 class JavassistProxy {
 
     @SuppressWarnings("unchecked")
-    protected static <T> T newFailFastProxy(Class interfaceClass ) throws Exception {
+    protected static <T> T newFailFastProxy(Class interfaceClass) throws Exception {
         CtClass defaultImplCtClass = checkAndCreate(interfaceClass);
 
         for (Method method : interfaceClass.getMethods()) {
@@ -67,11 +69,11 @@ class JavassistProxy {
         Stream.of(clazz)
                 .flatMap((a) -> Stream.of(a.getMethods()))
                 .forEach((b) -> {
-                 /*   if (!CompletableFuture.class.equals(b.getReturnType())) {
-                        throw new RuntimeException("method return-type must be CompletableFuture, " + b);
-                    }*/
-                    if (b.isDefault()) {
-                        throw new RuntimeException("method access can't be default, " + b);
+                    if (!b.isDefault()) {
+                        if (!Modifier.isStatic(b.getModifiers()))
+                            if (!CompletableFuture.class.equals(b.getReturnType())) {
+                                throw new RuntimeException("public method return-type must be CompletableFuture, " + b);
+                            }
                     }
                 });
 
@@ -93,10 +95,10 @@ class JavassistProxy {
         Method[] methodAry = interfaceClass.getMethods();
         StringBuilder sb = new StringBuilder();
         List<String> resultList = new ArrayList();
+        int methodId = 0;
         for (Method m : methodAry) {
-            if (m.isDefault()) {
-                continue;
-            }
+            if (m.isDefault()) continue;
+            if (Modifier.isStatic(m.getModifiers())) continue;
             sb.append("public ")
                     .append(m.getReturnType().getCanonicalName())
                     .append(" ")
@@ -131,8 +133,9 @@ class JavassistProxy {
             for (int i = 0; i < paramLength; i++) {
                 sb.append("\r\n params[" + i + "] = ($w)$" + (i + 1) + ";");
             }
+            sb.append("\r\n int methodId = " + methodId++ + ";");
             sb.append("\r\n Object response = " +
-                    "proxyInvoke.invoke(serviceName, params);")
+                    "proxyInvoke.invoke(serviceName, params, methodId);")
                     .append(" \r\n return ");
             if (!returnType.equals(void.class)) {
                 sb.append(buildReturn(returnType, "response"));

@@ -1,8 +1,10 @@
 package io.four.invoke;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface UserService {
 
-    String getName(String hello);
+    CompletableFuture<String>  getName(String hello);
 
-    int getAge();
+    CompletableFuture<Integer> getAge();
 }

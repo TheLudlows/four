@@ -52,3 +52,15 @@ TestRecycle.getResponse  thrpt   10  171.616 ± 0.397  ops/us
 TestRecycle.newResponse  thrpt   10   77.026 ± 3.010  ops/us
 
 可以看出利用高Recycle 接近于直接创建的2.5被性能
+
+load balance
+
+invokeFuture -- channel
+
+AtomicInteger 唯一自增ID
+
+writeBuf
+
+batch send
+
+server 超时控制

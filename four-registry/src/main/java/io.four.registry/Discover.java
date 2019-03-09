@@ -15,4 +15,10 @@ public interface Discover {
      * @return
      */
     List<Host> discover(String serviceName);
+
+    /**
+     * Start Discover
+     */
+
+    void start();
 }

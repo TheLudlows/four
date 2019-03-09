@@ -1,12 +1,12 @@
 package io.four.remoting;
 
 import io.four.protocol.four.Request;
-import io.four.protocol.four.Response;
+import io.netty.channel.ChannelHandlerContext;
 
 /**
  *  process the request and do some filter ops
  */
 public interface Processor {
 
-    Response process(Request request);
+    void process(Request request, ChannelHandlerContext ctx);
 }

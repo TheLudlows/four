@@ -8,6 +8,11 @@ import io.four.registry.config.Host;
 public interface Register {
 
     /**
+     * start register
+     */
+    void start();
+
+    /**
      * register service to config center
      */
     void register(String serverName, Host host);

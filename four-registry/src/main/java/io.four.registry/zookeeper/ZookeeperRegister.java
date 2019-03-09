@@ -26,6 +26,8 @@ public class ZookeeperRegister implements Register {
 
     public ZookeeperRegister(String zkAddress) {
         this.zkAddress = zkAddress;
+    }
+    public void start() {
         curator = CuratorFrameworkFactory.newClient(zkAddress,
                 1000 * 10, 1000 * 3, new ForeverRetryPolicy());
         curator.start();

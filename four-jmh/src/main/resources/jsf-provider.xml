@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jsf="http://jsf.jd.com/schema/jsf"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://jsf.jd.com/schema/jsf http://jsf.jd.com/schema/jsf/jsf.xsd">
+
+    <!-- 实现类 -->
+    <bean id="userServiceImpl1" class="io.four.invoke.UserServiceImpl1" />
+
+    <!-- 注册中心 address="192.168.150.119:40660,192.168.150.121:40660" -->
+    <jsf:registry id="jsfRegistry" index="i.jsf.jd.com" />
+
+    <!-- 服务端 端口默认22000-->
+    <jsf:server id="myjsf" protocol="jsf"/>
+
+    <!-- 发布服务 alias可以改成自己的 -->
+    <jsf:provider id="userService1" interface="io.four.invoke.UserService1" alias="CHANGE-IT"
+                 ref="userServiceImpl1" server="myjsf" >
+    </jsf:provider>
+    
+</beans>

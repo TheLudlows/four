@@ -3,7 +3,6 @@ package io.four.rpcHandler;
 import io.four.DefaultProcessor;
 import io.four.codec.server.Decoder;
 import io.four.codec.server.Encoder;
-import io.four.remoting.netty.ServerHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 

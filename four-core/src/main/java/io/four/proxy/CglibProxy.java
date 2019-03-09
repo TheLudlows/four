@@ -32,7 +32,7 @@ class CglibProxy {
         @Override
         public Object intercept(Object object, Method method, Object[] objects,
                                 MethodProxy methodProxy) throws Throwable {
-           return proxyInvoke.invoke(object.getClass().getCanonicalName(), objects);
+           return proxyInvoke.invoke(object.getClass().getCanonicalName(), objects,1);
         }
     }
 }

@@ -11,48 +11,45 @@ import static io.four.exception.ExceptionHolder.INVOKE_TIMEOUT;
 
 public class InvokeFuturePool {
 
-    private static LongObjectHashMap<InvokeFuture> waitPool = new LongObjectHashMap<>();
+    private LongObjectHashMap<InvokeFuture> waitPool = new LongObjectHashMap<>();
 
-    public static InvokeFuture add(Request request) {
+    public InvokeFuture add(Request request) {
         long id = request.getRequestId();
-        InvokeFuture future = waitPool.get(id);
-        if (future == null) {
-            future = new InvokeFuture();
-            future.setTime(request.getRequestId())
-                    .setRequestId(id);
-        } else {
-            future = waitPool.get(id);
-        }
+        InvokeFuture future = (InvokeFuture) request.getFuture();
+        future.setTime(request.getTimestamp())
+                .setRequestId(id);
+        waitPool.put(id, future);
         return future;
     }
 
-    public static void finish(Response response) {
+    public void finish(Response response) {
         long id = response.getRequestId();
         InvokeFuture future = waitPool.get(id);
         if (future != null && !future.isDone()) {
             future.complete(response.getServiceResult());
+            remove((id));
         }
+
     }
 
-    public static void remove(long id) {
+    public void remove(long id) {
         waitPool.remove(id);
     }
 
-    public static void cleanTimeout(int ms) {
+    public void cleanTimeout(int ms) {
 
         Iterator<LongObjectMap.PrimitiveEntry<InvokeFuture>> iterator = waitPool.entries().iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             InvokeFuture future = iterator.next().value();
-            long expireTime= future.getTime() + ms;
+            long expireTime = future.getTime() + ms;
             final long now = TimeUtil.currentTimeMillis();
             if (expireTime < now) {
                 continue;
-            }else {
+            } else {
                 iterator.remove();
                 future.completeExceptionally(INVOKE_TIMEOUT);
             }
         }
-
     }
 
 }

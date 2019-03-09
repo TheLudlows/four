@@ -1,6 +1,5 @@
 package io.four.proxy;
 
-
 import io.four.exception.NoAliveProviderException;
 import io.four.registry.config.Host;
 import io.four.registry.zookeeper.ZookeeperCenter;

@@ -18,7 +18,7 @@ public class TestJavaInvoker {
         //System.out.println(methods[0].getParameterCount());
         //System.out.println(invoker.invoke("hello"));
 
-        InvokerFactory.generateInvoker(userService);
+        InvokerFactory.generateInvoker(UserService.class,userService);
         Invoker<CompletableFuture> invoker = InvokerFactory.getInvoker(userService.getClass().getName(),1);
         System.out.println(invoker.invoke().get());
     }

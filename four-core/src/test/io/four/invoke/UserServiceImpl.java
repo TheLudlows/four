@@ -1,5 +1,7 @@
 package io.four.invoke;
 
+import io.four.TimeUtil;
+
 import java.util.concurrent.CompletableFuture;
 
 public class UserServiceImpl implements UserService {
@@ -15,5 +17,12 @@ public class UserServiceImpl implements UserService {
         CompletableFuture future = new CompletableFuture();
         future.complete(1);
         return future;
+    }
+
+    @Override
+    public CompletableFuture<Long> getTime() {
+        CompletableFuture future = new CompletableFuture();
+       future.complete(TimeUtil.currentTimeMillis());
+       return future;
     }
 }

@@ -10,13 +10,13 @@ import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.apache.curator.retry.RetryForever;
 
-
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.four.registry.config.HostWithWeight.*;
-import static io.four.registry.config.RegistryConstant.*;
+import static io.four.registry.config.HostWithWeight.buildHWW;
+import static io.four.registry.config.HostWithWeight.buildHWWs;
+import static io.four.registry.config.RegistryConstant.RPC_CONSTANTS;
 import static org.apache.curator.framework.recipes.cache.PathChildrenCache.StartMode.BUILD_INITIAL_CACHE;
 
 /**
@@ -29,6 +29,10 @@ public class ZookeeperDiscover implements Discover {
 
     public ZookeeperDiscover(String zkAddress) {
         this.zkAddress = zkAddress;
+
+    }
+
+    public void start() {
         curator = CuratorFrameworkFactory.newClient(zkAddress, 1000 * 10,
                 100, new RetryForever(1000));
         curator.start();
@@ -40,12 +44,12 @@ public class ZookeeperDiscover implements Discover {
         if (list != null && list.size() > 0) {
             return list;
         }
-        final String path = RPC_CONSTANTS + DEFAULT_ALIAS + serviceName;
+        final String path = RPC_CONSTANTS + "/" + serviceName;
         try {
             List<String> listStr = curator.getChildren().forPath(path);
             list = buildHWWs(listStr);
         } catch (Exception e) {
-            Log.info("Get server failed:" + path);
+            Log.warn("Get server failed:" + path, e);
         }
         registerWatcher(path);
         if (list != null) {

@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Thread)
 public class TestString {
 
-    static String s = "sdasdsndnslfmdnas,mm.a.d,ma.dma";
+    static String s = "    sdasdsndnslfmdnas,mm.a.d,ma.dma   ";
 
     static byte[] bytes = s.getBytes();
 
@@ -50,17 +50,28 @@ public class TestString {
         s.getBytes();
     }
 
-    public static void main(String[] args) throws Exception {
+    @Benchmark
+    @BenchmarkMode({Mode.Throughput})
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void strTrim() {
+        s.trim();
+    }
 
-        Options opt = new OptionsBuilder()
+
+
+
+    public static void main(String[] args) throws Exception {
+        System.out.println(s.length() == s.getBytes().length);
+        System.out.println(Byte.MAX_VALUE);
+       /* Options opt = new OptionsBuilder()
                 .include(TestString.class.getName())
                 .warmupIterations(10)
                 .measurementIterations(10)
-                .threads(5)
+                .threads(8)
                 .forks(1)
                 .build();
 
-        new Runner(opt).run();
+        new Runner(opt).run();*/
 
     }
 }

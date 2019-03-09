@@ -21,24 +21,14 @@ public class ProxyInvoke {
     private final LoadBalance loadBalance;
     private final BaseConfig baseConfig;
 
-    public Object invoke(String serviceName, Object[] params) throws NoAliveProviderException {
+    public Object invoke(String serviceName, Object[] params,int methodId) throws NoAliveProviderException {
         // recycle
         Request request = MessageUtil.getRequest();
         request.setServiceName(serviceName)
-                .setArgs(params);
-        Host host;
-        if (loadBalance == null) {
-            throw new NoAliveProviderException("No alive provider for" + serviceName);
-        } else {
-            if ((host = loadBalance.next()) == null) {
-                for (int i = 0; i < loadBalance.hostsSize() - 1; i++) {
-                    host = loadBalance.removeAndNext();
-                }
-                throw new NoAliveProviderException("No alive provider for" + serviceName);
-            }
-        }
+                .setArgs(params)
+                .setMethodIndex((byte)methodId);
         // FilterChain.invoke
-        return RPCClient.send(request, this);
+        return RPCClient.send(request, loadBalance.next());
     }
 
     protected ProxyInvoke(String serviceName, BaseConfig baseConfig) {

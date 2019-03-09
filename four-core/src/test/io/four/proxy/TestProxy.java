@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.util.concurrent.CompletableFuture;
 
+import static io.four.config.BaseConfig.CONSUMER;
+
 /**
  * @author TheLudlows
  */
@@ -12,7 +14,7 @@ public class TestProxy {
     @Test
     public void testProxy() {
         try {
-            Hell hell = DefaultProxyFactory.getProxy(Hell.class);
+            Hell hell = DefaultProxyFactory.getProxy(Hell.class, CONSUMER);
             //hell.say();
         } catch (Exception e) {
             e.printStackTrace();
@@ -29,10 +31,10 @@ public class TestProxy {
     @Test
     public void testJavassit() throws Exception {
         long start1 = System.currentTimeMillis();
-        Hell hell1 = DefaultProxyFactory.getProxy(Hell.class);
+        Hell hell1 = DefaultProxyFactory.getProxy(Hell.class, CONSUMER);
         System.out.println("JavassistProxy new " + (System.currentTimeMillis() - start1));
         long start2 = System.currentTimeMillis();
-        Hell hell2 = DefaultProxyFactory.getProxy(Hell.class);
+        Hell hell2 = DefaultProxyFactory.getProxy(Hell.class, CONSUMER);
         System.out.println("CglibProxy new " + (System.currentTimeMillis() - start2));
        /* long start3 = System.currentTimeMillis();
         for (int i = 0; i < 10000; i++) {

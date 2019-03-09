@@ -22,7 +22,7 @@ import static io.four.platformutils.PlatformUtils.SUPPORT_EPOLL;
  */
 public class NettyClient {
 
-    public final static ConcurrentHashMap<Host, Channel> CHANNELS = new ConcurrentHashMap();
+    public final ConcurrentHashMap<Host, Channel> CHANNELS = new ConcurrentHashMap();
     private EventLoopGroup eventLoopGroup;
     private Bootstrap bootstrap;
     private ChannelHandler handler;

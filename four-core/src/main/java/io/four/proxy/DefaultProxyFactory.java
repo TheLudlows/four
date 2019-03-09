@@ -1,7 +1,6 @@
 package io.four.proxy;
 
-import io.four.config.ConsumerConfig;
-
+import io.four.config.BaseConfig;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,11 +14,9 @@ public class DefaultProxyFactory {
     private static Map<Class, Object> proxyCache = new ConcurrentHashMap();
 
     @SuppressWarnings("unchecked")
-    public static  <T> T getProxy(Class clazz) throws Exception {
+    public static  <T> T getProxy(Class clazz, BaseConfig config) throws Exception {
         T t = (T) proxyCache.get(clazz);
         if (t == null) {
-            ConsumerConfig config = getConfig(clazz);
-
             t = newInstance(clazz,config);
             if(t != null) {
                 proxyCache.put(clazz, t);
@@ -28,11 +25,7 @@ public class DefaultProxyFactory {
         return t;
     }
 
-    private static ConsumerConfig getConfig(Class clazz) {
-        return null;
-    }
-
-    private static <T> T newInstance(Class clazz, ConsumerConfig config) throws Exception {
+    private static <T> T newInstance(Class clazz, BaseConfig config) throws Exception {
         if (clazz == null) {
             throw new RuntimeException("clazz cannot be null");
         }

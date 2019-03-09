@@ -59,6 +59,6 @@ public class Host {
 
     @Override
     public int hashCode() {
-        return Objects.hash(ip, port);
+        return ip.hashCode();
     }
 }

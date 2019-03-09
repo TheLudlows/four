@@ -1,5 +1,6 @@
 package io.four.protocol.four;
 
+import io.four.TimeUtil;
 import io.four.exception.TransportException;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
@@ -44,7 +45,7 @@ public class MessageUtil {
                 .setBodyLength(size);
     }
 
-    public static Response toResponse(ByteBuf buf) throws TransportException {
+    public static Response toResponse(ByteBuf buf) {
         if (buf == null) {
             throw new NullPointerException();
         }
@@ -68,7 +69,8 @@ public class MessageUtil {
 
     public static Request getRequest() {
         return REQUEST_RECYCLE.get()
-                .setRequestId(ID_ADDER.getAndIncrement());
+                .setRequestId(ID_ADDER.getAndIncrement())
+                .setTimestamp(TimeUtil.currentTimeMillis());
     }
 
     public static Response getResponse() {

@@ -1,11 +1,11 @@
 package io.four.protocol.four;
 
 
-import io.four.TimeUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
 
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
 
 import static io.four.protocol.four.ProtocolConstant.*;
 
@@ -27,6 +27,8 @@ public class Request extends BaseMessage {
     private Object[] args;
 
     private Recycler.Handle<Request> handle;
+
+    private transient CompletableFuture future;
 
     public void recycle() {
         args = null;
@@ -85,18 +87,29 @@ public class Request extends BaseMessage {
     }
 
     public Request() {
+        super(REQUEST, FASTJSON);
+    }
+
+    public Object getFuture() {
+        return future;
+    }
+
+    public Request setFuture(CompletableFuture future) {
+        this.future = future;
+        return this;
     }
 
     public static Request request(ByteBuf buf, Request request) {
         long requestId = buf.readLong();
         long timeStamp = buf.readLong();
-        byte[] bytes = new byte[SERVERNAME_LENGTH];
-        buf.readBytes(bytes);
+        byte length = buf.readByte();
+        byte[] serviceByte = new byte[length];
+        buf.readBytes(serviceByte);
         byte methodId = buf.readByte();
         Object[] params = (Object[]) serialize.byteBufToObject(buf, Object[].class);
         return request.setRequestId(requestId)
                 .setTimestamp(timeStamp)
-                .setServiceName(new String(bytes))
+                .setServiceName(new String(serviceByte))
                 .setMethodIndex(methodId)
                 .setArgs(params);
     }
@@ -106,8 +119,8 @@ public class Request extends BaseMessage {
         byteBuf.writeLong(requestId);
         byteBuf.writeLong(timestamp);
         byte[] bytes = serviceName.getBytes();
+        byteBuf.writeByte(bytes.length);
         byteBuf.writeBytes(bytes);
-        byteBuf.writeBytes(SERVERNAME_BYTES, 0, SERVERNAME_LENGTH - bytes.length);
         byteBuf.writeByte(methodIndex);
         serialize.objectToByteBuf(args, byteBuf);
     }
@@ -116,7 +129,7 @@ public class Request extends BaseMessage {
     public String toString() {
         return "Request{" + super.toString() +
                 ",requestId=" + requestId +
-                ", methodindex=" + methodIndex +
+                ", methodIndex=" + methodIndex +
                 ", serviceName='" + serviceName + '\'' +
                 ", args=" + Arrays.toString(args) +
                 ", timestamp=" + timestamp +

@@ -66,7 +66,6 @@ public class NettyServer {
         try {
             channel = bootstrap.bind(port).sync().channel();
             Log.info("Server started. Listening on: " + port);
-            channel.closeFuture().sync();
         } catch (InterruptedException e) {
             Log.warn("Server start failed!", e);
         }

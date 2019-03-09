@@ -1,13 +1,19 @@
 package io.four.invoke;
 
+import java.util.concurrent.CompletableFuture;
+
 public class UserServiceImpl implements UserService {
     @Override
-    public String getName(String hello) {
-        return hello + ":four";
+    public CompletableFuture<String> getName(String hello) {
+        CompletableFuture future = new CompletableFuture();
+        future.complete("four:"+hello);
+        return future;
     }
 
     @Override
-    public int getAge() {
-        return 1111;
+    public CompletableFuture<Integer> getAge() {
+        CompletableFuture future = new CompletableFuture();
+        future.complete(1);
+        return future;
     }
 }

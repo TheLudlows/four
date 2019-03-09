@@ -6,6 +6,7 @@ import io.four.protocol.four.MessageUtil;
 import io.four.protocol.four.Request;
 import io.four.protocol.four.Response;
 import io.four.remoting.Processor;
+import io.netty.channel.ChannelHandlerContext;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -13,11 +14,11 @@ import static io.four.protocol.four.ResponseEnum.*;
 
 public class DefaultProcessor implements Processor {
     @Override
-    public Response process(Request request) {
+    public void process(Request request, ChannelHandlerContext ctx) {
         Invoker<CompletableFuture<?>> invoker = InvokerFactory.getInvoker(request.getServiceName(), request.getMethodIndex());
         Response response = MessageUtil.getResponse();
         if (invoker == null) {
-            return response.setStatus(NO_IMPL)
+             response.setStatus(NO_IMPL)
                     .setRequestId(request.getRequestId())
                     .setServiceResult("no impl");
         }
@@ -31,7 +32,7 @@ public class DefaultProcessor implements Processor {
                 response.setStatus(IMPL_ERROR)
                         .setServiceResult(throwable.getMessage());
             }
+            ctx.writeAndFlush(response);
         });
-        return response;
     }
 }

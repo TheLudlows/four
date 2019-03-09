@@ -21,8 +21,7 @@ public class InvokerFactory {
      *
      * @param service
      */
-    public static void generateInvoker(Object service) {
-        Class clazz = service.getClass();
+    public static void generateInvoker(Class clazz, Object service) {
         if (invokers.get(clazz.getName()) != null) {
             throw new RuntimeException("This service has Invoker already " + clazz.getName());
         }
@@ -34,7 +33,8 @@ public class InvokerFactory {
         List<Invoker> list = new ArrayList<>();
         Invoker[] invokerArr;
         for (Method method : methods) {
-            if (method.getModifiers() != Modifier.PUBLIC) continue;
+            if (method.isDefault()) continue;
+            if (Modifier.isStatic(method.getModifiers())) continue;
             if (!CompletableFuture.class.equals(method.getReturnType())) {
                 System.out.println(method.getReturnType().getName());
                 throw new RuntimeException("method return-type must be CompletableFuture");
@@ -42,13 +42,17 @@ public class InvokerFactory {
             list.add(new JavassistInvoker(service, method, clazz));
         }
         invokerArr = new Invoker[list.size()];
-        for(int i=0; i<list.size();i++) {
+        for (int i = 0; i < list.size(); i++) {
             invokerArr[i] = list.get(i);
         }
         invokers.put(clazz.getName(), invokerArr);
     }
 
     public static Invoker getInvoker(String serviceName, int index) {
-        return invokers.get(serviceName)[index];
+        Invoker[] invoker = invokers.get(serviceName);
+        if (invoker == null) {
+            throw new RuntimeException("no such impl" + serviceName);
+        }
+        return invoker[index];
     }
 }

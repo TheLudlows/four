@@ -3,7 +3,7 @@ package io.four.config;
 /**
  * Base config
  */
-public abstract class BaseConfig {
+public class BaseConfig {
     protected String serviceId;
     protected String alias;
     protected String timeout;
@@ -12,23 +12,28 @@ public abstract class BaseConfig {
         return serviceId;
     }
 
-    public void setServiceId(String serviceId) {
+    public BaseConfig setServiceId(String serviceId) {
         this.serviceId = serviceId;
+        return this;
     }
 
     public String getAlias() {
         return alias;
     }
 
-    public void setAlias(String alias) {
+    public BaseConfig setAlias(String alias) {
         this.alias = alias;
+        return this;
     }
 
     public String getTimeout() {
         return timeout;
     }
 
-    public void setTimeout(String timeout) {
+    public BaseConfig setTimeout(String timeout) {
         this.timeout = timeout;
+        return this;
     }
+
+    public static BaseConfig CONSUMER = new BaseConfig().setAlias("alias");
 }

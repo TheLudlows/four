@@ -16,12 +16,14 @@ public class ZookeeperCenter {
     private static Register REGISTER;
     private static boolean init = false;
 
-    public static synchronized void init(String address) {
+    public static synchronized void initAndStart(String address) {
         if(init) {
             return;
         }
         DISCOVER = new ZookeeperDiscover(address);
         REGISTER = new ZookeeperRegister(address);
+        DISCOVER.start();
+        REGISTER.start();
     }
 
     public static List<Host> discover(String serverName) {
@@ -31,7 +33,7 @@ public class ZookeeperCenter {
         return DISCOVER.discover(serverName);
     }
 
-    public static void Register(String serviceName, Host host){
+    public static void register(String serviceName, Host host){
         if(REGISTER == null) {
             throw new RuntimeException("Not init Zookeeper center first");
         }

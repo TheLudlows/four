@@ -8,7 +8,5 @@ public interface UserService {
 
     CompletableFuture<Integer> getAge();
 
-    default int getLength(){
-        return 1;
-    }
+    CompletableFuture<Long> getTime();
 }
