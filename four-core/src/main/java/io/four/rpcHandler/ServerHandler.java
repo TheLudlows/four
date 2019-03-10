@@ -27,12 +27,17 @@ public class ServerHandler extends SimpleChannelInboundHandler<Request> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        //Log.info(ctx.channel().remoteAddress() + "客户端已连接");
+        Log.info(ctx.channel().remoteAddress() + "客户端已连接");
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        Log.warn("Exception caught on " + ctx.channel(), cause);
-        ctx.channel().close();
+        try{
+            ctx.channel().close();
+            Log.info("client "+ctx.channel().remoteAddress()+" is closed");
+        } catch (Exception e) {
+            Log.warn("close channel failed", e);
+        }
+
     }
 }

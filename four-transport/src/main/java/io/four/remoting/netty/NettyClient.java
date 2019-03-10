@@ -1,6 +1,5 @@
 package io.four.remoting.netty;
 
-import io.four.protocol.four.Request;
 import io.four.registry.config.Host;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -11,8 +10,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.ConcurrentHashMap;
-
 import static io.four.platformutils.PlatformUtils.AVAILABLE_PROCESSORS;
 import static io.four.platformutils.PlatformUtils.SUPPORT_EPOLL;
 
@@ -22,7 +19,6 @@ import static io.four.platformutils.PlatformUtils.SUPPORT_EPOLL;
  */
 public class NettyClient {
 
-    public final ConcurrentHashMap<Host, Channel> CHANNELS = new ConcurrentHashMap();
     private EventLoopGroup eventLoopGroup;
     private Bootstrap bootstrap;
     private ChannelHandler handler;
@@ -54,50 +50,25 @@ public class NettyClient {
         bootstrap.handler(handler);
     }
 
-    public void close() {
-
+    public void close(){
     }
 
     public Channel connect(Host host) {
-        if (!channelActive(host)) {
-            doConnect(host);
-        }
-        return CHANNELS.get(host);
+        return doConnect(host);
     }
 
-    private void doConnect(Host host) {
+    private Channel doConnect(Host host) {
         InetSocketAddress isa = new InetSocketAddress(host.getIp(), host.getPort());
         Channel channel = null;
 
         synchronized (this) {
-            if (channelActive(host)) {
-                return;
-            }
+
             try {
                 channel = this.bootstrap.connect(isa).sync().channel();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            CHANNELS.put(host, channel);
+            return channel;
         }
-    }
-
-    public boolean channelActive(Host host) {
-        Channel channel = CHANNELS.get(host);
-        if (channel != null) {
-            if (!channel.isActive()) {
-                CHANNELS.remove(host);
-                channel.close();
-                return false;
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public ChannelFuture send(Request request, Host host) {
-        Channel channel = connect(host);
-        return channel.writeAndFlush(request);
     }
 }

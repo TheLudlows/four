@@ -12,6 +12,7 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 @State(Scope.Thread)
 
@@ -48,7 +49,10 @@ public class FOURJSF {
                 .build();
         new Runner(opt).run();
     }
-
+    @TearDown
+    public void close() throws IOException {
+        RPCClient.close();
+    }
    /* @Benchmark
     @BenchmarkMode({Mode.Throughput})
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -63,12 +67,12 @@ public class FOURJSF {
         consumer1.getAge().get();
     }
 
-    @Benchmark
+   /* @Benchmark
     @BenchmarkMode({Mode.Throughput})
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void four_getName() throws Exception {
         consumer1.getName("four-RPC");
-    }
+    }*/
 /*
     @Benchmark
     @BenchmarkMode({Mode.Throughput})

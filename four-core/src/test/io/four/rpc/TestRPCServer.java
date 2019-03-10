@@ -22,9 +22,10 @@ public class TestRPCServer {
         UserService userService = RPCClient.getProxy(UserService.class,new BaseConfig().setAlias("alias"));
         System.out.println(userService.getName("FFFFF").get());
         long start = TimeUtil.currentTimeMillis();
-        for(int i=0;i<10000;i++)
-           userService.getAge().get();
+        for(int i=0;i<100000;i++)
+           userService.getAge();
         System.out.println(TimeUtil.currentTimeMillis() - start);
+        System.in.read();
     }
 
 

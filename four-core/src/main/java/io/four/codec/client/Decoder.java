@@ -1,6 +1,5 @@
 package io.four.codec.client;
 
-import io.four.InvokeFuturePool;
 import io.four.protocol.four.MessageUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,5 +27,10 @@ public class Decoder extends LengthFieldBasedFrameDecoder {
             }
         }
         return null;
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        ctx.channel().close();
     }
 }
