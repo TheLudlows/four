@@ -7,15 +7,20 @@ import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+
 import java.util.concurrent.TimeUnit;
 
+import static io.four.RPCClient.RPCCLIENT;
 
-@State(Scope.Thread)
+
+@State(Scope.Benchmark)
 public class FourClient {
     private static UserService consumer;
+    private static RPCClient rpcClient;
 
-   static  {
-        RPCClient.start();
+    static {
+        rpcClient = RPCCLIENT;
+        rpcClient.start();
         try {
             consumer = RPCClient.getProxy(UserService.class, new BaseConfig().setAlias("alias"));
         } catch (Exception e) {
@@ -24,9 +29,6 @@ public class FourClient {
     }
 
     public static void main(String[] args) throws Exception {
-
-        //FourClient client = new FourClient();
-        //client.close();
         Options opt = new OptionsBuilder()
                 .include(FourClient.class.getName())
                 .warmupIterations(5)
@@ -36,16 +38,18 @@ public class FourClient {
                 .build();
         new Runner(opt).run();
     }
+
     @TearDown
     public void close() {
-        RPCClient.close();
+        rpcClient.close();
     }
-    /*@Benchmark
+
+    @Benchmark
     @BenchmarkMode({Mode.Throughput})
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public void four_getAge() throws Exception {
         consumer.getAge();
-    }*/
+    }
 
     @Benchmark
     @BenchmarkMode({Mode.Throughput})
@@ -53,11 +57,4 @@ public class FourClient {
     public void four_getAgeGet() throws Exception {
         consumer.getAge().get();
     }
-
-   /* @Benchmark
-    @BenchmarkMode({Mode.Throughput})
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void four_getName() throws Exception {
-        consumer1.getName("four-RPC");
-    }*/
 }

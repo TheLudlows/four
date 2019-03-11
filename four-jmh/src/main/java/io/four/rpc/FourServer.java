@@ -11,7 +11,7 @@ public class FourServer {
 
     public static void main(String[] args) throws IOException {
         UserService service = new UserServiceImpl();
-        RPCServer server = new RPCServer("locahost:7777");
+        RPCServer server = new RPCServer("localhost:7777");
         server.start();
         server.register(UserService.class, service, new BaseConfig().setAlias("alias"),5);
     }

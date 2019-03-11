@@ -23,8 +23,9 @@ public class TestRPCServer {
 
     @Test
     public void client() throws Exception {
-        RPCClient.start();
-        UserService userService = RPCClient.getProxy(UserService.class,new BaseConfig().setAlias("alias"));
+        RPCClient rpcClient =  new RPCClient("localhost:2181");
+        rpcClient.start();
+        UserService userService = rpcClient.getProxy(UserService.class,new BaseConfig().setAlias("alias"));
         System.out.println(userService.getName("FFFFF").get());
         long start = TimeUtil.currentTimeMillis();
         for(int i=0;i<100000;i++)

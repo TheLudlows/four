@@ -40,7 +40,4 @@ public class ZookeeperCenter {
         REGISTER.register(serviceName,host);
     }
 
-
-
-
 }

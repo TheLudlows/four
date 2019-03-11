@@ -5,8 +5,9 @@ import io.four.config.BaseConfig;
 import io.four.log.Log;
 import io.four.protocol.four.Request;
 import io.four.proxy.DefaultProxyFactory;
+import io.four.registry.Discover;
 import io.four.registry.config.Host;
-import io.four.registry.zookeeper.ZookeeperCenter;
+import io.four.registry.zookeeper.ZookeeperDiscover;
 import io.four.remoting.netty.NettyClient;
 import io.four.rpcHandler.ClientChannelInitializer;
 import io.netty.channel.Channel;
@@ -14,28 +15,37 @@ import io.netty.channel.Channel;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static io.four.InvokeFuturePool.poolMap;
+
 public class RPCClient {
 
-    private static NettyClient nettyClient = new NettyClient(new ClientChannelInitializer());
-    private static ConcurrentHashMap<Host, Connection> connectMap = new ConcurrentHashMap();
-    private static boolean start = false;
-    public static synchronized void start() {
+    public static RPCClient RPCCLIENT = new RPCClient("localhost:2181");
+
+    private NettyClient nettyClient = new NettyClient(new ClientChannelInitializer());
+    private ConcurrentHashMap<Host, Connection> connectMap = new ConcurrentHashMap();
+    private boolean start = false;
+    private Discover discover;
+    public RPCClient(String registerAddress) {
+        discover = new ZookeeperDiscover(registerAddress);
+    }
+
+    public synchronized void start() {
         if(start) {
            return;
         }
-        // register init
-        ZookeeperCenter.initAndStart("localhost:2181");
+        discover.start();
         nettyClient.init();
     }
 
-    public static CompletableFuture send(Request request, Host host) {
+
+    public CompletableFuture send(Request request, Host host) {
         Connection connection = connectMap.get(host);
         if( connection == null) {
             synchronized (RPCClient.class) {
                 connection = connectMap.get(host);
                 if (connection == null) {
                     Channel channel = nettyClient.connect(host);
-                    connection = new Connection(channel);
+                    connection = new Connection(channel,poolMap.get(channel));
                     connectMap.put(host, connection);
                 }
             }
@@ -52,7 +62,7 @@ public class RPCClient {
     /**
      * connect to all provider
      */
-    public static void close() {
+    public void close() {
         connectMap.forEach((key, connection) -> {
             try {
                 connection.close();
@@ -60,8 +70,9 @@ public class RPCClient {
                 Log.warn("Close RPC client Failed",e);
             }
         });
-
+        poolMap.clear();
         nettyClient.close();
+        discover.close();
     }
 
 }

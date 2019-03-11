@@ -25,20 +25,17 @@ public class Encoder extends MessageToByteEncoder<Request> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Request request, ByteBuf byteBuf) throws Exception {
-        if (invokeFuturePool.add(request) == null) {
-            Log.info("Pool full !" + ctx.channel().toString());
-            return;
-        }
+        invokeFuturePool.add(request);
+
         request.toByteBuf(byteBuf);
         request.recycle();
-        //Log.info("Write to bytBuf:"+request.toString());
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         ctx.channel().close();
         try {
-            invokeFuturePool.close();
+           invokeFuturePool.close();
         } catch (Exception e) {
             Log.warn("close invokeFuturePool failed", e);
         }

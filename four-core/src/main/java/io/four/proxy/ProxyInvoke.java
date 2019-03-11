@@ -9,6 +9,8 @@ import io.four.protocol.four.MessageUtil;
 import io.four.protocol.four.Request;
 import io.four.registry.config.Host;
 
+import static io.four.RPCClient.RPCCLIENT;
+
 /**
  * ProxyInvoke is used to invoke rpc client witch will call NettyClient send
  * we want do load balance flow control in this model
@@ -28,7 +30,7 @@ public class ProxyInvoke {
                 .setArgs(params)
                 .setMethodIndex((byte)methodId);
         // FilterChain.invoke
-        return RPCClient.send(request, loadBalance.next());
+        return RPCCLIENT.send(request, loadBalance.next());
     }
 
     protected ProxyInvoke(String serviceName, BaseConfig baseConfig) {

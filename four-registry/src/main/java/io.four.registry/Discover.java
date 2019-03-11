@@ -21,4 +21,10 @@ public interface Discover {
      */
 
     void start();
+
+    /**
+     * close
+     */
+
+    void close();
 }

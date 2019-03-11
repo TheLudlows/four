@@ -92,4 +92,9 @@ public class ZookeeperDiscover implements Discover {
         this.zkAddress = zkAddress;
         return this;
     }
+
+    public void close() {
+        cacheMap.clear();
+        curator.close();
+    }
 }

@@ -104,4 +104,9 @@ public class ZookeeperRegister implements Register {
     public String getZkAddress() {
         return zkAddress;
     }
+
+    public void close() {
+        curator.close();
+        cacheMap.clear();
+    }
 }

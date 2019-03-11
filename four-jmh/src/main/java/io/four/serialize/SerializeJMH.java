@@ -3,7 +3,6 @@ package io.four.serialize;
 import io.four.protocol.four.MessageUtil;
 import io.four.protocol.four.Request;
 import io.four.serialization.SerializerHolder;
-import io.four.serialization.fastjson.FastJSONSerialize;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import org.openjdk.jmh.annotations.*;
