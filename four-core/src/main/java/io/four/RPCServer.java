@@ -22,6 +22,9 @@ public class RPCServer {
     public RPCServer(String address, int port) {
         this.address = "localhost:" + port;
         ChannelHandler handler = new ServerChannelInitializer();
+        if(ZookeeperCenter.REGISTER != null) {
+            throw new RuntimeException("You can only start one RPC server on per JVM");
+        }
         ZookeeperCenter.REGISTER = new ZookeeperRegister(address);
         this.server = new NettyServer(handler, port);
     }
