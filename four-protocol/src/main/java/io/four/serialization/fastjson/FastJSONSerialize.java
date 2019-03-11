@@ -17,7 +17,7 @@ import static java.lang.ThreadLocal.withInitial;
 
 public class FastJSONSerialize implements Serialize {
 
-    private static ThreadLocal<ByteBufInputStream> INPUTSREAM_HOLDER = withInitial(ByteBufInputStream::new);
+    private static ThreadLocal<ByteBufInputStream> INPUTSTREAM_HOLDER = withInitial(ByteBufInputStream::new);
     private static ThreadLocal<ByteBufOutputStream> OUTPUTSTREAM_HOLDER = withInitial(ByteBufOutputStream::new);
 
     @Override
@@ -51,7 +51,7 @@ public class FastJSONSerialize implements Serialize {
     @Override
     public Object byteBufToObject(ByteBuf buf, Class clazz) {
         try {
-            return JSON.parseObject(INPUTSREAM_HOLDER.get().setBuffer(buf), clazz);
+            return JSON.parseObject(INPUTSTREAM_HOLDER.get().setBuffer(buf), clazz);
         } catch (IOException e) {
             e.printStackTrace();
         }
