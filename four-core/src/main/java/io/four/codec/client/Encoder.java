@@ -3,7 +3,6 @@ package io.four.codec.client;
 import io.four.InvokeFuturePool;
 import io.four.log.Log;
 import io.four.protocol.four.Request;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
@@ -25,9 +24,12 @@ public class Encoder extends MessageToByteEncoder<Request> {
     }
 
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, Request request, ByteBuf byteBuf) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, Request request, ByteBuf byteBuf) throws Exception {
+        if (invokeFuturePool.add(request) == null) {
+            Log.info("Pool full !" + ctx.channel().toString());
+            return;
+        }
         request.toByteBuf(byteBuf);
-        invokeFuturePool.add(request);
         request.recycle();
         //Log.info("Write to bytBuf:"+request.toString());
     }
@@ -38,7 +40,7 @@ public class Encoder extends MessageToByteEncoder<Request> {
         try {
             invokeFuturePool.close();
         } catch (Exception e) {
-            Log.warn("close invokeFuturePool failed",e);
+            Log.warn("close invokeFuturePool failed", e);
         }
     }
 
@@ -49,7 +51,7 @@ public class Encoder extends MessageToByteEncoder<Request> {
         try {
             invokeFuturePool.close();
         } catch (Exception e) {
-            Log.warn("close invokeFuturePool failed",e);
+            Log.warn("close invokeFuturePool failed", e);
         }
     }
 

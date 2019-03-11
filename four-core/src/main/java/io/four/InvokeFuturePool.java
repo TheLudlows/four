@@ -1,22 +1,33 @@
 package io.four;
 
 import io.four.exception.ConnectionException;
+import io.four.exception.InvokePoolFullException;
+import io.four.log.Log;
 import io.four.protocol.four.Request;
 import io.four.protocol.four.Response;
 import io.netty.util.collection.LongObjectHashMap;
 import io.netty.util.collection.LongObjectMap;
 
 import java.util.Iterator;
+import java.util.concurrent.CompletableFuture;
 
 import static io.four.exception.ExceptionHolder.INVOKE_TIMEOUT;
 
 public class InvokeFuturePool {
 
+    private final static int MAX_POOL_SIZE = 5000;
     private final static int WAIT_MAX_TIME = 2000;
     private final static int FINISH_TIME = 1000;
     private LongObjectHashMap<InvokeFuture> waitPool = new LongObjectHashMap<>();
 
-    public InvokeFuture add(Request request) {
+    public CompletableFuture add(Request request) {
+        int size = waitPool.size();
+        if (size > MAX_POOL_SIZE) {
+            CompletableFuture future = request.getFuture();
+            future.completeExceptionally(new InvokePoolFullException("invoke pool full:" + size));
+            Log.info("Invoke pool size:" + size);
+            return null;
+        }
         long id = request.getRequestId();
         InvokeFuture future = (InvokeFuture) request.getFuture();
         future.setTime(request.getTimestamp())
@@ -30,9 +41,8 @@ public class InvokeFuturePool {
         InvokeFuture future = waitPool.get(id);
         if (future != null) {
             future.complete(response.getServiceResult());
-            remove((id));
+            remove(id);
         }
-
     }
 
     private void remove(long id) {
@@ -43,7 +53,7 @@ public class InvokeFuturePool {
         long finishTIme = TimeUtil.currentTimeMillis() + FINISH_TIME;
         Iterator<LongObjectMap.PrimitiveEntry<InvokeFuture>> iterator = waitPool.entries().iterator();
         while (iterator.hasNext()) {
-            if(finishTIme > TimeUtil.currentTimeMillis() ) {
+            if (finishTIme > TimeUtil.currentTimeMillis()) {
                 break;
             }
             InvokeFuture future = iterator.next().value();

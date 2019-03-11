@@ -27,7 +27,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Request> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        Log.info(ctx.channel().remoteAddress() + "客户端已连接");
+        Log.info("Server address:"+ctx.channel().localAddress()+" client:"+ctx.channel().remoteAddress());
     }
 
     @Override

@@ -32,7 +32,7 @@ public class Response extends BaseMessage {
 
     public void recycle() {
         serviceResult = null;
-        handle.recycle(this);
+        //handle.recycle(this);
     }
 
     public static Response response(ByteBuf buf, Response response) {

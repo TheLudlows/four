@@ -1,5 +1,6 @@
 package io.four.remoting.netty;
 
+import io.four.log.Log;
 import io.four.registry.config.Host;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -51,6 +52,11 @@ public class NettyClient {
     }
 
     public void close(){
+        try {
+            eventLoopGroup.shutdownGracefully().sync();
+        } catch (InterruptedException e) {
+            Log.warn("Netty exit error",e);
+        }
     }
 
     public Channel connect(Host host) {

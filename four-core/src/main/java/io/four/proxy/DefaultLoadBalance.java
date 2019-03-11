@@ -4,6 +4,7 @@ import io.four.exception.NoAliveProviderException;
 import io.four.registry.config.Host;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * robin load balance
@@ -12,8 +13,7 @@ import java.util.List;
 public class DefaultLoadBalance extends BaseLoadBalance {
 
 
-    //private AtomicInteger index = new AtomicInteger();
-    int index = 0;
+    private AtomicInteger index = new AtomicInteger();
     protected DefaultLoadBalance(String serviceName) {
         super(serviceName);
     }
@@ -27,7 +27,7 @@ public class DefaultLoadBalance extends BaseLoadBalance {
         if (getHostList() == null || getHostList().size() == 0) {
             throw new NoAliveProviderException("No alive provider for" + serviceName);
         }
-        final int n = index/*.getAndIncrement()*/;
+        final int n = index.getAndIncrement();
         final int length = getHostList().size();
         return getHostList().get(n % length);
     }

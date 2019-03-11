@@ -88,13 +88,6 @@
                 <artifactId>spring-context</artifactId>
                 <version>${spring_version}</version>
             </dependency>
-
-            <!-- Log libs -->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>${slf4j_version}</version>
-            </dependency>
     </dependencies>
 
 </project>

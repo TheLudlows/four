@@ -39,7 +39,7 @@ public class MessageUtil {
         byte mType = buf.readByte();
         byte sType = buf.readByte();
         int size = buf.readInt();
-        Request request = request(buf, REQUEST_RECYCLE.get());
+        Request request = request(buf, getRequest());
         return (Request) request.setmType(mType)
                 .setsType(sType)
                 .setBodyLength(size);
@@ -53,28 +53,21 @@ public class MessageUtil {
         byte mType = buf.readByte();
         byte sType = buf.readByte();
         int size = buf.readInt();
-        Response response = response(buf, RESPONSE_RECYCLE.get());
+        Response response = response(buf, getResponse());
         return (Response) response.setmType(mType)
                 .setsType(sType)
                 .setBodyLength(size);
     }
 
-    public static void writeRequest(Request request, ByteBuf buf) {
-        request.toByteBuf(buf);
-    }
-
-    public static void writeResponse(Response response, ByteBuf buf) {
-        response.toByteBuf(buf);
-    }
-
     public static Request getRequest() {
-        return REQUEST_RECYCLE.get()
-                .setRequestId(ID_ADDER.getAndIncrement())
+        // REQUEST_RECYCLE.get()
+         return        new Request().setRequestId(ID_ADDER.getAndIncrement())
                 .setTimestamp(TimeUtil.currentTimeMillis());
     }
 
     public static Response getResponse() {
-        return RESPONSE_RECYCLE.get();
+        //return RESPONSE_RECYCLE.get();
+        return new Response();
     }
 
 }

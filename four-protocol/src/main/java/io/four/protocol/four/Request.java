@@ -33,7 +33,7 @@ public class Request extends BaseMessage {
     public void recycle() {
         args = null;
         serviceName = null;
-        handle.recycle(this);
+        //handle.recycle(this);
     }
 
     protected Request(Recycler.Handle handle) {
@@ -90,7 +90,7 @@ public class Request extends BaseMessage {
         super(REQUEST, FASTJSON);
     }
 
-    public Object getFuture() {
+    public CompletableFuture getFuture() {
         return future;
     }
 

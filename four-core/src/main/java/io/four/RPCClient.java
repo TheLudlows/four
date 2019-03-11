@@ -18,8 +18,11 @@ public class RPCClient {
 
     private static NettyClient nettyClient = new NettyClient(new ClientChannelInitializer());
     private static ConcurrentHashMap<Host, Connection> connectMap = new ConcurrentHashMap();
-
-    public static void init() {
+    private static boolean start = false;
+    public static synchronized void start() {
+        if(start) {
+           return;
+        }
         // register init
         ZookeeperCenter.initAndStart("localhost:2181");
         nettyClient.init();
@@ -27,12 +30,14 @@ public class RPCClient {
 
     public static CompletableFuture send(Request request, Host host) {
         Connection connection = connectMap.get(host);
-        synchronized (RPCClient.class) {
-            connection = connectMap.get(host);
-            if(connection ==null) {
-                Channel channel = nettyClient.connect(host);
-                connection = new Connection(channel);
-                connectMap.put(host, connection);
+        if( connection == null) {
+            synchronized (RPCClient.class) {
+                connection = connectMap.get(host);
+                if (connection == null) {
+                    Channel channel = nettyClient.connect(host);
+                    connection = new Connection(channel);
+                    connectMap.put(host, connection);
+                }
             }
         }
         InvokeFuture future = new InvokeFuture();
@@ -55,6 +60,8 @@ public class RPCClient {
                 Log.warn("Close RPC client Failed",e);
             }
         });
+
+        nettyClient.close();
     }
 
 }

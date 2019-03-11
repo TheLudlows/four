@@ -17,7 +17,7 @@ import static io.four.platformutils.PlatformUtils.SUPPORT_EPOLL;
  * @since 0.1
  */
 public class NettyServer {
-    private static boolean start = false;
+    private boolean start = false;
     private int port = 7777;
     private EventLoopGroup boss;
     private EventLoopGroup worker;

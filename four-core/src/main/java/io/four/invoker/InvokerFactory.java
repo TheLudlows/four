@@ -1,5 +1,7 @@
 package io.four.invoker;
 
+import io.four.log.Log;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ public class InvokerFactory {
      */
     public static void generateInvoker(Class clazz, Object service) {
         if (invokers.get(clazz.getName()) != null) {
-            throw new RuntimeException("This service has Invoker already " + clazz.getName());
+            Log.info("This service has Invoker already " + clazz.getName());
         }
 
         if (!Modifier.isPublic(clazz.getModifiers())) {

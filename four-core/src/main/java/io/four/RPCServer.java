@@ -14,20 +14,25 @@ import io.netty.channel.ChannelHandler;
  * RPC server
  */
 public class RPCServer {
-    private static ChannelHandler handler = new ServerChannelInitializer();
-    private static NettyServer server = new NettyServer(handler, 7777);
-    private static Host host = new HostWithWeight("localhost:7777",5);
+    private  ChannelHandler handler = new ServerChannelInitializer();
+    private  NettyServer server;
+    private  String address;
     //start netty server
-    public static void start() {
+    public RPCServer(String address) {
+        this.address = address;
+        Host host = new Host(address);
+        this.server = new NettyServer(handler,host.getPort());
+    }
+    public  void start() {
         server.start();
         ZookeeperCenter.initAndStart("localhost:2181");
     }
 
-    public static void register(Class clazz, Object service, BaseConfig config) {
+    public void register(Class clazz, Object service, BaseConfig config, int weight) {
         // generate invoker
         try {
             InvokerFactory.generateInvoker(clazz,service);
-            ZookeeperCenter.register(config.getAlias() + "/" + clazz.getName(), host);
+            ZookeeperCenter.register(config.getAlias() + "/" + clazz.getName(), new HostWithWeight(address,weight));
         }catch (Exception e) {
             Log.warn("RPC server start error",e);
         }
