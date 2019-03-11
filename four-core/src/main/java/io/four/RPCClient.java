@@ -7,6 +7,7 @@ import io.four.protocol.four.Request;
 import io.four.proxy.DefaultProxyFactory;
 import io.four.registry.Discover;
 import io.four.registry.config.Host;
+import io.four.registry.zookeeper.ZookeeperCenter;
 import io.four.registry.zookeeper.ZookeeperDiscover;
 import io.four.remoting.netty.NettyClient;
 import io.four.rpcHandler.ClientChannelInitializer;
@@ -24,16 +25,16 @@ public class RPCClient {
     private NettyClient nettyClient = new NettyClient(new ClientChannelInitializer());
     private ConcurrentHashMap<Host, Connection> connectMap = new ConcurrentHashMap();
     private boolean start = false;
-    private Discover discover;
     public RPCClient(String registerAddress) {
-        discover = new ZookeeperDiscover(registerAddress);
+        ZookeeperCenter.DISCOVER = new ZookeeperDiscover(registerAddress);
     }
 
     public synchronized void start() {
         if(start) {
            return;
         }
-        discover.start();
+        start = true;
+        ZookeeperCenter.startDiscover();
         nettyClient.init();
     }
 
@@ -72,7 +73,7 @@ public class RPCClient {
         });
         poolMap.clear();
         nettyClient.close();
-        discover.close();
+        ZookeeperCenter.DISCOVER.close();
     }
 
 }

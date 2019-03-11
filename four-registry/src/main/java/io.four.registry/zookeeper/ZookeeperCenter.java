@@ -12,18 +12,26 @@ import java.util.List;
 
 public class ZookeeperCenter {
 
-    private static Discover DISCOVER;
-    private static Register REGISTER;
-    private static boolean init = false;
+    public static Discover DISCOVER;
+    public static Register REGISTER;
+    private static boolean registerStart = false;
+    private static boolean discoverStart = false;
 
-    public static synchronized void initAndStart(String address) {
-        if(init) {
-            return;
+
+    public static synchronized void startRegister() {
+        if(registerStart) {
+            throw new RuntimeException("Register center Start already ");
         }
-        DISCOVER = new ZookeeperDiscover(address);
-        REGISTER = new ZookeeperRegister(address);
-        DISCOVER.start();
+        registerStart = true;
         REGISTER.start();
+    }
+
+    public static synchronized void startDiscover() {
+        if(discoverStart) {
+            throw new RuntimeException("Discover center Start already ");
+        }
+        discoverStart = true;
+        DISCOVER.start();
     }
 
     public static List<Host> discover(String serverName) {
