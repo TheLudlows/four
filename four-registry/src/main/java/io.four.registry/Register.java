@@ -25,6 +25,5 @@ public interface Register {
     /**
      * close
      */
-
     void close();
 }

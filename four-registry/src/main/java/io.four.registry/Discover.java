@@ -19,12 +19,10 @@ public interface Discover {
     /**
      * Start Discover
      */
-
     void start();
 
     /**
      * close
      */
-
     void close();
 }
