@@ -22,8 +22,8 @@ public class Connection {
 
     public void close() {
         try {
-            pool.close();
             channel.close();
+            pool.close();
         }catch (Exception e) {
             Log.warn("close channel failed ",e);
         }

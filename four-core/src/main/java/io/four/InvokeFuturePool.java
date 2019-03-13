@@ -69,8 +69,8 @@ public class InvokeFuturePool {
         Iterator<LongObjectMap.PrimitiveEntry<InvokeFuture>> iterator = waitPool.entries().iterator();
         while (iterator.hasNext()) {
             InvokeFuture future = iterator.next().value();
-            iterator.remove();
             future.completeExceptionally(new ConnectionException("connection is closed"));
+            iterator.remove();
         }
     }
 

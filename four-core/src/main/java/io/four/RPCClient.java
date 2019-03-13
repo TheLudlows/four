@@ -5,7 +5,6 @@ import io.four.config.BaseConfig;
 import io.four.log.Log;
 import io.four.protocol.four.Request;
 import io.four.proxy.DefaultProxyFactory;
-import io.four.registry.Discover;
 import io.four.registry.config.Host;
 import io.four.registry.zookeeper.ZookeeperCenter;
 import io.four.registry.zookeeper.ZookeeperDiscover;

@@ -44,12 +44,12 @@ public class FourClient {
         rpcClient.close();
     }
 
-    @Benchmark
+   /* @Benchmark
     @BenchmarkMode({Mode.Throughput})
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public void four_getAge() throws Exception {
         consumer.getAge();
-    }
+    }*/
 
     @Benchmark
     @BenchmarkMode({Mode.Throughput})

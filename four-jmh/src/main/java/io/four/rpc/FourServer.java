@@ -5,11 +5,10 @@ import io.four.config.BaseConfig;
 import io.four.invoke.UserService;
 import io.four.invoke.UserServiceImpl;
 
-import java.io.IOException;
 
 public class FourServer {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         UserService service = new UserServiceImpl();
         RPCServer server = new RPCServer("localhost:2181",7777);
         server.start();

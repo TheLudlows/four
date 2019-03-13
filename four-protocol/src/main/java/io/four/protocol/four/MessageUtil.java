@@ -1,11 +1,9 @@
 package io.four.protocol.four;
 
+import io.four.FastLong;
 import io.four.TimeUtil;
-import io.four.exception.TransportException;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.Recycler;
-
-import java.util.concurrent.atomic.AtomicLong;
 
 import static io.four.protocol.four.Request.request;
 import static io.four.protocol.four.Response.response;
@@ -16,7 +14,7 @@ import static io.four.protocol.four.Response.response;
  * @since 0.1
  */
 public class MessageUtil {
-    private static AtomicLong ID_ADDER = new AtomicLong();
+    private static FastLong ID_ADDER = new FastLong();
     private static final Recycler<Request> REQUEST_RECYCLE = new Recycler<Request>() {
         @Override
         protected Request newObject(Handle<Request> handle) {
@@ -61,7 +59,7 @@ public class MessageUtil {
 
     public static Request getRequest() {
         // REQUEST_RECYCLE.get()
-         return        new Request().setRequestId(ID_ADDER.getAndIncrement())
+         return        new Request().setRequestId(ID_ADDER.next())
                 .setTimestamp(TimeUtil.currentTimeMillis());
     }
 
