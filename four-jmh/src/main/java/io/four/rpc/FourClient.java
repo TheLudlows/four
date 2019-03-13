@@ -22,7 +22,7 @@ public class FourClient {
         rpcClient = RPCCLIENT;
         rpcClient.start();
         try {
-            consumer = RPCClient.getProxy(UserService.class, new BaseConfig().setAlias("alias"));
+            consumer = rpcClient.getProxy(UserService.class, new BaseConfig().setAlias("alias"));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -8,6 +8,8 @@ import io.four.invoke.UserService;
 import io.four.invoke.UserServiceImpl;
 import org.junit.Test;
 
+import static io.four.RPCClient.RPCCLIENT;
+
 public class TestRPCServer {
 
     public static void main(String[] args) {
@@ -15,15 +17,11 @@ public class TestRPCServer {
         RPCServer server = new RPCServer("localhost:2181",7777);
         server.start();
         server.register(UserService.class, service, new BaseConfig().setAlias("alias"),5);
-
-        RPCServer server2 = new RPCServer("localhost:2181",8888);
-        server2.start();
-        server2.register(UserService.class, service, new BaseConfig().setAlias("alias"),5);
     }
 
     @Test
     public void client() throws Exception {
-        RPCClient rpcClient =  new RPCClient("localhost:2181");
+        RPCClient rpcClient =  RPCCLIENT;
         rpcClient.start();
         UserService userService = rpcClient.getProxy(UserService.class,new BaseConfig().setAlias("alias"));
         System.out.println(userService.getName("FFFFF").get());

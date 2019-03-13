@@ -18,7 +18,7 @@ public class InvokeFuturePool {
 
     public static ConcurrentHashMap<Channel, InvokeFuturePool> poolMap = new ConcurrentHashMap<>();
 
-    private final static int WAIT_MAX_TIME = 2000;
+    private final static int WAIT_MAX_TIME = 5000;
     private final static int FINISH_TIME = 1000;
     private LongObjectHashMap<InvokeFuture> waitPool = new LongObjectHashMap<>();
 

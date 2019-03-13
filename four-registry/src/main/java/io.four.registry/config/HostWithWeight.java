@@ -46,4 +46,9 @@ public class HostWithWeight extends Host {
         this.weight = weight;
         return this;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

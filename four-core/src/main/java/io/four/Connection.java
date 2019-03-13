@@ -11,31 +11,26 @@ public class Connection {
     private final static int MAX_POOL_SIZE = 5000;
 
 
-    private Channel channel;
+    private Channel channels[];
+    private int n;
 
-    private InvokeFuturePool pool;
-
-    public Connection(Channel channel, InvokeFuturePool pool) {
-        this.channel = channel;
-        this.pool = pool;
+    public Connection(Channel[] channels) {
+        this.channels = channels;
+        n = channels.length;
     }
 
     public void close() {
         try {
-            channel.close();
-            pool.close();
-        }catch (Exception e) {
-            Log.warn("close channel failed ",e);
+            for (int i = 0; i < channels.length; i++) {
+                channels[i].close();
+            }
+        } catch (Exception e) {
+            Log.warn("close channel failed ", e);
         }
     }
 
     public void send(Request request) {
-        int size = pool.size();
-        if (size > MAX_POOL_SIZE) {
-            CompletableFuture future = request.getFuture();
-            future.completeExceptionally(new InvokePoolFullException("invoke pool full:" + size));
-            return;
-        }
-        channel.writeAndFlush(request);
+        int index = (int) request.getRequestId() % n;
+        channels[index].writeAndFlush(request);
     }
 }

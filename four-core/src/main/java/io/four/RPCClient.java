@@ -12,25 +12,28 @@ import io.four.remoting.netty.NettyClient;
 import io.four.rpcHandler.ClientChannelInitializer;
 import io.netty.channel.Channel;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static io.four.InvokeFuturePool.poolMap;
 
 public class RPCClient {
+    private static final int CHANNEL_NUM = 4;
 
     public static RPCClient RPCCLIENT = new RPCClient("localhost:2181");
 
     private NettyClient nettyClient = new NettyClient(new ClientChannelInitializer());
     private ConcurrentHashMap<Host, Connection> connectMap = new ConcurrentHashMap();
     private boolean start = false;
-    public RPCClient(String registerAddress) {
+
+    private RPCClient(String registerAddress) {
         ZookeeperCenter.DISCOVER = new ZookeeperDiscover(registerAddress);
     }
 
     public synchronized void start() {
-        if(start) {
-           return;
+        if (start) {
+            return;
         }
         start = true;
         ZookeeperCenter.startDiscover();
@@ -40,13 +43,11 @@ public class RPCClient {
 
     public CompletableFuture send(Request request, Host host) {
         Connection connection = connectMap.get(host);
-        if( connection == null) {
+        if (connection == null) {
             synchronized (RPCClient.class) {
                 connection = connectMap.get(host);
                 if (connection == null) {
-                    Channel channel = nettyClient.connect(host);
-                    connection = new Connection(channel,poolMap.get(channel));
-                    connectMap.put(host, connection);
+                    connection = doConnection(host);
                 }
             }
         }
@@ -55,8 +56,22 @@ public class RPCClient {
         return future;
     }
 
-    public static <T> T getProxy(Class clazz, BaseConfig config) throws Exception {
-        return DefaultProxyFactory.getProxy(clazz,config);
+    public <T> T getProxy(Class clazz, BaseConfig config) throws Exception {
+        String serviceName = config.getAlias() + "/" + clazz.getCanonicalName();
+        List<Host> list = ZookeeperCenter.discover(serviceName);
+        for (Host host : list) {
+            doConnection(host);
+        }
+        return DefaultProxyFactory.getProxy(clazz, config);
+    }
+
+    private Connection doConnection(Host host) {
+        Channel[] channels = new Channel[CHANNEL_NUM];
+        for (int i = 0; i < CHANNEL_NUM; i++)
+            channels[i] = nettyClient.connect(host);
+        Connection connection = new Connection(channels);
+        connectMap.put(host, connection);
+        return connection;
     }
 
     /**
@@ -67,7 +82,7 @@ public class RPCClient {
             try {
                 connection.close();
             } catch (Exception e) {
-                Log.warn("Close RPC client Failed",e);
+                Log.warn("Close RPC client Failed", e);
             }
         });
         poolMap.clear();

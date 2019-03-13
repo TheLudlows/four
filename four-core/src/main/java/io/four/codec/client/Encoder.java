@@ -56,7 +56,7 @@ public class Encoder extends MessageToByteEncoder<Request> {
     public void connect(ChannelHandlerContext ctx, SocketAddress remoteAddress, SocketAddress localAddress, ChannelPromise promise) throws Exception {
         super.connect(ctx, remoteAddress, localAddress, promise);
         ctx.executor().scheduleWithFixedDelay(() -> invokeFuturePool.cleanTimeout(),
-                1000, 1000, TimeUnit.MILLISECONDS);
+                5000, 5000, TimeUnit.MILLISECONDS);
         Log.info("start to clean timeout future");
     }
 }
