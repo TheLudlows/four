@@ -6,21 +6,22 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.concurrent.TimeUnit;
 
-@State(Scope.Thread)
+@State(Scope.Benchmark)
 public class JSFClient {
-    private static UserService1 consumer = (UserService1) new ClassPathXmlApplicationContext(
-            "/jsf-consumer.xml")
-            .getBean("userService1");
+    private  ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+            "/jsf-consumer.xml");
+    private  UserService1 consumer = (UserService1) context.getBean("userService1");
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
                 .include(JSFClient.class.getName())
                 .warmupIterations(5)
                 .measurementIterations(5)
-                .threads(8)
+                .threads(100)
                 .forks(1)
                 .build();
         new Runner(opt).run();
@@ -38,5 +39,10 @@ public class JSFClient {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void jsf_getName() throws Exception {
         consumer.getName("jsf");
+    }
+
+    @TearDown
+    public void close() {
+        context.close();
     }
 }

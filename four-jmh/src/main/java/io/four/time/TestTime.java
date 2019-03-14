@@ -9,7 +9,6 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
-
 public class TestTime {
     @Benchmark
     @BenchmarkMode({Mode.Throughput})

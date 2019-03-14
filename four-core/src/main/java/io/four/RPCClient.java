@@ -1,6 +1,5 @@
 package io.four;
 
-
 import io.four.config.BaseConfig;
 import io.four.log.Log;
 import io.four.protocol.four.Request;
@@ -82,9 +81,18 @@ public class RPCClient {
             try {
                 connection.close();
             } catch (Exception e) {
-                Log.warn("Close RPC client Failed", e);
+                Log.warn("Close RPC client failed", e);
             }
         });
+
+        poolMap.forEach((key, pool) -> {
+            try {
+                pool.close();
+            } catch (Exception e) {
+                Log.warn("Close wait pool failed", e);
+            }
+        });
+
         poolMap.clear();
         nettyClient.close();
         ZookeeperCenter.DISCOVER.close();

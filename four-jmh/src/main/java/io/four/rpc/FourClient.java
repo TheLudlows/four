@@ -32,15 +32,15 @@ public class FourClient {
         Options opt = new OptionsBuilder()
                 .include(FourClient.class.getName())
                 .warmupIterations(5)
-                .measurementIterations(5)
-                .threads(8)
+                .measurementIterations(20)
+                .threads(16)
                 .forks(1)
                 .build();
         new Runner(opt).run();
     }
 
     @TearDown
-    public void close() {
+    public static void close() {
         rpcClient.close();
     }
 
@@ -54,7 +54,7 @@ public class FourClient {
     @Benchmark
     @BenchmarkMode({Mode.Throughput})
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void four_getAgeGet() throws Exception {
-        consumer.getAge().get();
+    public int four_getAgeGet() throws Exception {
+        return consumer.getAge().get();
     }
 }

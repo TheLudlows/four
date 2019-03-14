@@ -1,7 +1,6 @@
 package io.four;
 
 import io.four.exception.ConnectionException;
-import io.four.exception.InvokePoolFullException;
 import io.four.protocol.four.Request;
 import io.four.protocol.four.Response;
 import io.netty.channel.Channel;

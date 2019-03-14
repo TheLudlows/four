@@ -1,15 +1,10 @@
 package io.four;
 
-import io.four.exception.InvokePoolFullException;
 import io.four.log.Log;
 import io.four.protocol.four.Request;
 import io.netty.channel.Channel;
 
-import java.util.concurrent.CompletableFuture;
-
 public class Connection {
-    private final static int MAX_POOL_SIZE = 5000;
-
 
     private Channel channels[];
     private int n;
