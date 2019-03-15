@@ -2,7 +2,7 @@ package io.four.protocol.four;
 
 /**
  * ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┐
- *     2   │   1    │    1   │       4
+ * 2   │   1    │    1   │       4
  * ├ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─  ─ ─ ─ ─ ─ ─ ──  ┤
  * │       │        │        │
  * │   Agg    M Type  S Type     Body Size      │
@@ -17,7 +17,8 @@ package io.four.protocol.four;
 
 public interface ProtocolConstant {
 
-    short AGG = 0x2F;
+    // 9527  This is for Stephen Chow
+    short AGG = 0x2537;
     byte FASTJSON = 0x1;
     byte KRYO = 0x2;
     byte REQUEST = 0x1;
@@ -29,6 +30,6 @@ public interface ProtocolConstant {
      */
     int SERVERNAME_LENGTH = 0x40;
 
-    byte[]  SERVERNAME_BYTES = new byte[SERVERNAME_LENGTH];
+    byte[] SERVERNAME_BYTES = new byte[SERVERNAME_LENGTH];
 
 }
