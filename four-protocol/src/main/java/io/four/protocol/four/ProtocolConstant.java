@@ -2,7 +2,7 @@ package io.four.protocol.four;
 
 /**
  * ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┐
- * 2   │   1    │    1   │       4
+ *     2   │   1    │    1   │       4
  * ├ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─  ─ ─ ─ ─ ─ ─ ──  ┤
  * │       │        │        │
  * │   Agg    M Type  S Type     Body Size      │
